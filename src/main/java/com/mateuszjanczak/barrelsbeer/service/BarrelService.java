@@ -27,6 +27,7 @@ public class BarrelService {
     public void addBarrel(BarrelAddRequest barrelAddRequest) {
         Barrel barrel = barrelMapper.dtoToEntity(barrelAddRequest);
         barrelRepository.save(barrel);
+        logService.saveLog(barrel, LogType.BARREL_NEW);
     }
 
     public List<Barrel> getBarrelList() {
@@ -41,7 +42,7 @@ public class BarrelService {
             barrel.setBeerType(barrelSetRequest.getBeerType());
             barrel.setCapacity(barrelSetRequest.getCapacity());
             barrelRepository.save(barrel);
-            logService.saveLog(barrel, LogType.BEER_SET);
+            logService.saveLog(barrel, LogType.BARREL_SET);
         }
     }
 
@@ -50,9 +51,11 @@ public class BarrelService {
 
         if(optionalBarrel.isPresent()) {
             Barrel barrel = optionalBarrel.get();
-            barrel.setCapacity(barrel.getCapacity() > 0 ? barrel.getCapacity() - 1 : 0);
-            barrelRepository.save(barrel);
-            logService.saveLog(barrel, LogType.BEER_HIT);
+            if(barrel.getCapacity() > 0) {
+                barrel.setCapacity(barrel.getCapacity() - 1);
+                barrelRepository.save(barrel);
+                logService.saveLog(barrel, LogType.BARREL_HIT);
+            }
         }
     }
 
