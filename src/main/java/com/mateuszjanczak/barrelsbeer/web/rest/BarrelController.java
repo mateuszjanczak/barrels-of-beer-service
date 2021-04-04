@@ -16,6 +16,7 @@ public class BarrelController {
 
     private final static String LIST_BARRELS = "/barrels";
     private final static String ADD_BARREL = "/barrels/add";
+    private final static String GET_BARREL = "/barrels/{id}";
     private final static String SET_BARREL = "/barrels/{id}/set";
     private final static String HIT_BARREL = "/barrels/{id}/hit";
 
@@ -23,6 +24,11 @@ public class BarrelController {
 
     public BarrelController(BarrelService barrelService) {
         this.barrelService = barrelService;
+    }
+
+    @GetMapping(GET_BARREL)
+    ResponseEntity<Barrel> getBarrelById(@PathVariable String id) {
+        return new ResponseEntity<>(barrelService.getBarrelById(id), HttpStatus.OK);
     }
 
     @GetMapping(LIST_BARRELS)

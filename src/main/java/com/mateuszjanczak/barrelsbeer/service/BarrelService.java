@@ -50,9 +50,14 @@ public class BarrelService {
 
         if(optionalBarrel.isPresent()) {
             Barrel barrel = optionalBarrel.get();
-            barrel.setCapacity(barrel.getCapacity() - 1);
+            barrel.setCapacity(barrel.getCapacity() > 0 ? barrel.getCapacity() - 1 : 0);
             barrelRepository.save(barrel);
             logService.saveLog(barrel, LogType.BEER_HIT);
         }
+    }
+
+    public Barrel getBarrelById(String id) {
+        Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
+        return optionalBarrel.orElse(null);
     }
 }
