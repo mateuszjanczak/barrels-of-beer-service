@@ -104,11 +104,13 @@ Response
     {
         "date": "2021-04-05T00:26:34.321+00:00",
         "barrelName": "Beczka #1",
+        "beerType": "Marcowe",
         "count": 8
     },
     {
         "date": "2021-04-05T00:26:34.321+00:00",
         "barrelName": "Beczka #2",
+        "beerType": "Koźlak",
         "count": 5
     }
 ]
