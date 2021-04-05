@@ -94,3 +94,22 @@ Response
     }
 ]
 ```
+
+Codzienne statystyki
+```
+GET /statistics/daily
+
+Response
+[
+    {
+        "date": "2021-04-05T00:26:34.321+00:00",
+        "barrelName": "Beczka #1",
+        "count": 8
+    },
+    {
+        "date": "2021-04-05T00:26:34.321+00:00",
+        "barrelName": "Beczka #2",
+        "count": 5
+    }
+]
+```

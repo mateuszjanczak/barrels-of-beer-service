@@ -26,4 +26,6 @@ public class LogController {
     public ResponseEntity<List<Log>> getLogsList(){
         return new ResponseEntity<>(logService.getLogsList(), HttpStatus.OK);
     }
+
+
 }
