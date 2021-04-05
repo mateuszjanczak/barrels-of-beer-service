@@ -8,5 +8,6 @@ import java.util.Date;
 public class DailyStatistics {
     Date date;
     String barrelName;
+    String beerType;
     Long count;
 }
