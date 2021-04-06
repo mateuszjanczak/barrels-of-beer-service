@@ -1,6 +1,7 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelAddRequest;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelHitResponse;
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelSetRequest;
 import com.mateuszjanczak.barrelsbeer.domain.entity.Barrel;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
@@ -34,13 +35,13 @@ public class BarrelService {
         return barrelRepository.findAll();
     }
 
-    public void setBarrel(String id, BarrelSetRequest barrelSetRequest) {
+    public void setBarrel(int id, BarrelSetRequest barrelSetRequest) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
 
         if(optionalBarrel.isPresent()) {
             Barrel barrel = optionalBarrel.get();
             if(barrelSetRequest.getCapacity() >= 0 && barrelSetRequest.getCapacity() <= barrel.getTotalCapacity()) {
-                barrel.setBeerType(barrelSetRequest.getBeerType());
+                barrel.setBarrelName(barrelSetRequest.getBarrelName());
                 barrel.setCapacity(barrelSetRequest.getCapacity());
                 barrelRepository.save(barrel);
                 logService.saveLog(barrel, LogType.BARREL_SET);
@@ -48,7 +49,7 @@ public class BarrelService {
         }
     }
 
-    public void hit(String id) {
+    public Optional<BarrelHitResponse> hit(int id) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
 
         if(optionalBarrel.isPresent()) {
@@ -57,11 +58,14 @@ public class BarrelService {
                 barrel.setCapacity(barrel.getCapacity() - 1);
                 barrelRepository.save(barrel);
                 logService.saveLog(barrel, LogType.BARREL_HIT);
+                return Optional.ofNullable(barrelMapper.barrrelToHitResponse(barrel));
             }
         }
+
+        return Optional.empty();
     }
 
-    public Barrel getBarrelById(String id) {
+    public Barrel getBarrelById(int id) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
         return optionalBarrel.orElse(null);
     }

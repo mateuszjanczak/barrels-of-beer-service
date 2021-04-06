@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +37,6 @@ public class StatisticsService {
             dailyStatistics.setBarrelName(entry.getKey());
             dailyStatistics.setCount(entry.getValue());
             dailyStatistics.setDate(new Date());
-            dailyStatistics.setBeerType(list.stream().filter(log -> log.getBarrelName().equals(entry.getKey())).findFirst().get().getBeerType());
             dailyStatisticsList.add(dailyStatistics);
         }
 

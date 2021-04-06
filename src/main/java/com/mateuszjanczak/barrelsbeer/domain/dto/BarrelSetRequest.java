@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 public class BarrelSetRequest {
     @NotBlank
     @NotNull
-    String beerType;
+    String barrelName;
 
     @Range(min = 1)
     @NotNull
