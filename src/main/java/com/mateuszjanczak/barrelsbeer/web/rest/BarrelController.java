@@ -1,8 +1,11 @@
 package com.mateuszjanczak.barrelsbeer.web.rest;
 
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelAddRequest;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelHitResponse;
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelSetRequest;
+import com.mateuszjanczak.barrelsbeer.domain.dto.ErrorResponse;
 import com.mateuszjanczak.barrelsbeer.domain.entity.Barrel;
+import com.mateuszjanczak.barrelsbeer.exception.HitException;
 import com.mateuszjanczak.barrelsbeer.service.BarrelService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -50,8 +54,15 @@ public class BarrelController {
     }
 
     @GetMapping(HIT_BARREL)
-    ResponseEntity<?> hitBarrel(@PathVariable int id) {
-        barrelService.hit(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<BarrelHitResponse> hitBarrel(@PathVariable int id) {
+        Optional<BarrelHitResponse> optionalBarrelHitResponse = barrelService.hit(id);
+        return optionalBarrelHitResponse.map(barrelHitResponse -> new ResponseEntity<>(barrelHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
+    }
+
+    @ExceptionHandler(value = HitException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse handleHitException(HitException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, "Beczka nie istnieje lub jej pojemność jest równa 0");
     }
 }

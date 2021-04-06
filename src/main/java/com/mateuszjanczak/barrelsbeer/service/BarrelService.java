@@ -1,6 +1,7 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelAddRequest;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelHitResponse;
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelSetRequest;
 import com.mateuszjanczak.barrelsbeer.domain.entity.Barrel;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
@@ -48,7 +49,7 @@ public class BarrelService {
         }
     }
 
-    public void hit(int id) {
+    public Optional<BarrelHitResponse> hit(int id) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
 
         if(optionalBarrel.isPresent()) {
@@ -57,8 +58,11 @@ public class BarrelService {
                 barrel.setCapacity(barrel.getCapacity() - 1);
                 barrelRepository.save(barrel);
                 logService.saveLog(barrel, LogType.BARREL_HIT);
+                return Optional.ofNullable(barrelMapper.barrrelToHitResponse(barrel));
             }
         }
+
+        return Optional.empty();
     }
 
     public Barrel getBarrelById(int id) {
