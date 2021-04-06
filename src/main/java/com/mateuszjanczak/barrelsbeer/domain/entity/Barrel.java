@@ -6,21 +6,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Barrel {
     @Id
-    String id;
+    int id;
 
-    String barrelName;
-
-    String beerType = "puste";
+    String barrelName = "brak nazwy";
 
     int capacity = 0;
 
     int totalCapacity;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -30,14 +28,6 @@ public class Barrel {
 
     public void setBarrelName(String barrelName) {
         this.barrelName = barrelName;
-    }
-
-    public String getBeerType() {
-        return beerType;
-    }
-
-    public void setBeerType(String beerType) {
-        this.beerType = beerType;
     }
 
     public int getCapacity() {

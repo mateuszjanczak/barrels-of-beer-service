@@ -3,14 +3,14 @@ package com.mateuszjanczak.barrelsbeer.domain.dto;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
 public class BarrelAddRequest {
-    @NotBlank
+
+    @Range(min = 1)
     @NotNull
-    String barrelName;
+    int id;
 
     @Range(min = 1)
     @NotNull

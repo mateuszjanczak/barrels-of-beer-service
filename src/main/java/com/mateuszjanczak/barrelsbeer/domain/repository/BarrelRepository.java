@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BarrelRepository extends MongoRepository<Barrel, String> {
+public interface BarrelRepository extends MongoRepository<Barrel, Integer> {
 
 }

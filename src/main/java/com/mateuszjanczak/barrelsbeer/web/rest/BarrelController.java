@@ -28,7 +28,7 @@ public class BarrelController {
     }
 
     @GetMapping(GET_BARREL)
-    ResponseEntity<Barrel> getBarrelById(@PathVariable String id) {
+    ResponseEntity<Barrel> getBarrelById(@PathVariable int id) {
         return new ResponseEntity<>(barrelService.getBarrelById(id), HttpStatus.OK);
     }
 
@@ -44,13 +44,13 @@ public class BarrelController {
     }
 
     @PostMapping(SET_BARREL)
-    ResponseEntity<?> setBarrel(@PathVariable String id, @Valid @RequestBody BarrelSetRequest barrelSetRequest) {
+    ResponseEntity<?> setBarrel(@PathVariable int id, @Valid @RequestBody BarrelSetRequest barrelSetRequest) {
         barrelService.setBarrel(id, barrelSetRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(HIT_BARREL)
-    ResponseEntity<?> hitBarrel(@PathVariable String id) {
+    ResponseEntity<?> hitBarrel(@PathVariable int id) {
         barrelService.hit(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

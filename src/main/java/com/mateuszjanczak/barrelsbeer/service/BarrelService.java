@@ -34,13 +34,13 @@ public class BarrelService {
         return barrelRepository.findAll();
     }
 
-    public void setBarrel(String id, BarrelSetRequest barrelSetRequest) {
+    public void setBarrel(int id, BarrelSetRequest barrelSetRequest) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
 
         if(optionalBarrel.isPresent()) {
             Barrel barrel = optionalBarrel.get();
             if(barrelSetRequest.getCapacity() >= 0 && barrelSetRequest.getCapacity() <= barrel.getTotalCapacity()) {
-                barrel.setBeerType(barrelSetRequest.getBeerType());
+                barrel.setBarrelName(barrelSetRequest.getBarrelName());
                 barrel.setCapacity(barrelSetRequest.getCapacity());
                 barrelRepository.save(barrel);
                 logService.saveLog(barrel, LogType.BARREL_SET);
@@ -48,7 +48,7 @@ public class BarrelService {
         }
     }
 
-    public void hit(String id) {
+    public void hit(int id) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
 
         if(optionalBarrel.isPresent()) {
@@ -61,7 +61,7 @@ public class BarrelService {
         }
     }
 
-    public Barrel getBarrelById(String id) {
+    public Barrel getBarrelById(int id) {
         Optional<Barrel> optionalBarrel = barrelRepository.findById(id);
         return optionalBarrel.orElse(null);
     }

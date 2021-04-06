@@ -12,11 +12,9 @@ public class Log {
     @Id
     String id;
 
-    String barrelId;
+    int barrelId;
 
     String barrelName;
-
-    String beerType;
 
     int capacity;
 
@@ -32,8 +30,12 @@ public class Log {
         this.id = id;
     }
 
-    public String getBarrelId() {
+    public int getBarrelId() {
         return barrelId;
+    }
+
+    public void setBarrelId(int barrelId) {
+        this.barrelId = barrelId;
     }
 
     public String getBarrelName() {
@@ -44,17 +46,6 @@ public class Log {
         this.barrelName = barrelName;
     }
 
-    public void setBarrelId(String barrelId) {
-        this.barrelId = barrelId;
-    }
-
-    public String getBeerType() {
-        return beerType;
-    }
-
-    public void setBeerType(String beerType) {
-        this.beerType = beerType;
-    }
 
     public int getCapacity() {
         return capacity;

@@ -38,7 +38,6 @@ public class StatisticsService {
             dailyStatistics.setBarrelName(entry.getKey());
             dailyStatistics.setCount(entry.getValue());
             dailyStatistics.setDate(new Date());
-            dailyStatistics.setBeerType(list.stream().filter(log -> log.getBarrelName().equals(entry.getKey())).findFirst().get().getBeerType());
             dailyStatisticsList.add(dailyStatistics);
         }
 

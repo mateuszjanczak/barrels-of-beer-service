@@ -22,7 +22,6 @@ public class LogService {
         log.setBarrelId(barrel.getId());
         log.setBarrelName(barrel.getBarrelName());
         log.setLogType(logType);
-        log.setBeerType(barrel.getBeerType());
         log.setCapacity(barrel.getCapacity());
         log.setDate(new Date());
         logRepository.save(log);

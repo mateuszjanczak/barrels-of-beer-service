@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class BarrelMapper {
     public Barrel dtoToEntity(BarrelAddRequest barrelAddRequest) {
         Barrel barrel = new Barrel();
-        barrel.setBarrelName(barrelAddRequest.getBarrelName());
+        barrel.setId(barrelAddRequest.getId());
         barrel.setTotalCapacity(barrelAddRequest.getTotalCapacity());
         return barrel;
     }
