@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,13 +38,13 @@ public class BarrelController {
     }
 
     @PostMapping(ADD_BARREL)
-    ResponseEntity<?> addBarrel(@RequestBody BarrelAddRequest barrelAddRequest) {
+    ResponseEntity<?> addBarrel(@Valid @RequestBody BarrelAddRequest barrelAddRequest) {
         barrelService.addBarrel(barrelAddRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(SET_BARREL)
-    ResponseEntity<?> setBarrel(@PathVariable String id, @RequestBody BarrelSetRequest barrelSetRequest) {
+    ResponseEntity<?> setBarrel(@PathVariable String id, @Valid @RequestBody BarrelSetRequest barrelSetRequest) {
         barrelService.setBarrel(id, barrelSetRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

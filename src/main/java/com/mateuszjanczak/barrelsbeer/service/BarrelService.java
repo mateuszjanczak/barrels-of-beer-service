@@ -39,10 +39,12 @@ public class BarrelService {
 
         if(optionalBarrel.isPresent()) {
             Barrel barrel = optionalBarrel.get();
-            barrel.setBeerType(barrelSetRequest.getBeerType());
-            barrel.setCapacity(barrelSetRequest.getCapacity());
-            barrelRepository.save(barrel);
-            logService.saveLog(barrel, LogType.BARREL_SET);
+            if(barrelSetRequest.getCapacity() >= 0 && barrelSetRequest.getCapacity() <= barrel.getTotalCapacity()) {
+                barrel.setBeerType(barrelSetRequest.getBeerType());
+                barrel.setCapacity(barrelSetRequest.getCapacity());
+                barrelRepository.save(barrel);
+                logService.saveLog(barrel, LogType.BARREL_SET);
+            }
         }
     }
 
