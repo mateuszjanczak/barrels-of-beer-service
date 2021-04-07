@@ -23,7 +23,7 @@ public class BarrelTapController {
     private final static String ADD_BARREL_TAP = "/barrelTaps/add";
     private final static String GET_BARREL_TAP = "/barrelTaps/{id}";
     private final static String SET_BARREL_TAP = "/barrelTaps/{id}/set";
-    private final static String HIT_BARREL_TAP = "/barrelTaps/{id}/hit";
+    private final static String HIT_BARREL_TAP = "/barrelTaps/{id}/hit/{value}";
 
     private final BarrelTapService barrelTapService;
 
@@ -54,8 +54,8 @@ public class BarrelTapController {
     }
 
     @GetMapping(HIT_BARREL_TAP)
-    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id) {
-        Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id);
+    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable int value) {
+        Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id, value);
         return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
     }
 
