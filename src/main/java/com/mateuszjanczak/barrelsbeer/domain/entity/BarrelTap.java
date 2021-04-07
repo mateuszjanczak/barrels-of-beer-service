@@ -4,22 +4,32 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Barrel {
+public class BarrelTap {
     @Id
-    int id;
+    int barrelTapId;
 
     String barrelName = "brak nazwy";
 
+    String barrelContent = "brak zawartości";
+
     int capacity = 0;
 
-    int totalCapacity;
+    int totalCapacity = 1;
 
-    public int getId() {
-        return id;
+    public int getBarrelTapId() {
+        return barrelTapId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBarrelTapId(int barrelTapId) {
+        this.barrelTapId = barrelTapId;
+    }
+
+    public String getBarrelContent() {
+        return barrelContent;
+    }
+
+    public void setBarrelContent(String barrelContent) {
+        this.barrelContent = barrelContent;
     }
 
     public String getBarrelName() {

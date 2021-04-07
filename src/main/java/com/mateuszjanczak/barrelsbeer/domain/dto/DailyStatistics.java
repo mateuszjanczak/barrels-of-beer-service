@@ -7,6 +7,6 @@ import java.util.Date;
 @Data
 public class DailyStatistics {
     Date date;
-    String barrelName;
+    String barrelContent;
     Long count;
 }
