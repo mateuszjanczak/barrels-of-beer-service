@@ -26,7 +26,7 @@ public class StatisticsService {
         LocalDateTime now = LocalDateTime.now();
         Date min = convertToDateViaInstant(now.with(LocalTime.MIN));
         Date max = convertToDateViaInstant(now.with(LocalTime.MAX));
-        List<Log> list = logRepository.findLogsByDateBetween(min, max).stream().filter(log -> log.getLogType().equals(LogType.BARREL_TAP_HIT)).collect(Collectors.toList());
+        List<Log> list = logRepository.findLogsByDateBetween(min, max).stream().filter(log -> log.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
 
         Map<String, Long> collect = list.stream().collect(Collectors.groupingBy(Log::getBarrelContent, Collectors.counting()));
 
