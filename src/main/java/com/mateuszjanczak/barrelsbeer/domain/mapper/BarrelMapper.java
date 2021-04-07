@@ -1,24 +1,23 @@
 package com.mateuszjanczak.barrelsbeer.domain.mapper;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelAddRequest;
-import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelHitResponse;
-import com.mateuszjanczak.barrelsbeer.domain.entity.Barrel;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapAddRequest;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapHitResponse;
+import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BarrelMapper {
-    public Barrel dtoToEntity(BarrelAddRequest barrelAddRequest) {
-        Barrel barrel = new Barrel();
-        barrel.setId(barrelAddRequest.getId());
-        barrel.setTotalCapacity(barrelAddRequest.getTotalCapacity());
-        return barrel;
+    public BarrelTap dtoToEntity(BarrelTapAddRequest barrelTapAddRequest) {
+        BarrelTap barrelTap = new BarrelTap();
+        barrelTap.setBarrelTapId(barrelTapAddRequest.getBarrelTapId());
+        return barrelTap;
     }
 
-    public BarrelHitResponse barrrelToHitResponse(Barrel barrel) {
-        BarrelHitResponse barrelHitResponse = new BarrelHitResponse();
-        barrelHitResponse.setBarrelId(barrel.getId());
-        barrelHitResponse.setOldValue(barrel.getCapacity() + 1);
-        barrelHitResponse.setNewValue(barrel.getCapacity());
-        return barrelHitResponse;
+    public BarrelTapHitResponse barrelToHitResponse(BarrelTap barrelTap) {
+        BarrelTapHitResponse barrelTapHitResponse = new BarrelTapHitResponse();
+        barrelTapHitResponse.setBarrelTapId(barrelTap.getBarrelTapId());
+        barrelTapHitResponse.setOldValue(barrelTap.getCapacity() + 1);
+        barrelTapHitResponse.setNewValue(barrelTap.getCapacity());
+        return barrelTapHitResponse;
     }
 }

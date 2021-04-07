@@ -12,6 +12,10 @@ public class BarrelSetRequest {
     @NotNull
     String barrelName;
 
+    @NotBlank
+    @NotNull
+    String barrelContent;
+
     @Range(min = 1)
     @NotNull
     int capacity;

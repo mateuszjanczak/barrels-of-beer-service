@@ -1,21 +1,21 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
-import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelRepository;
+import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.LogRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AdminService {
-    private final BarrelRepository barrelRepository;
+    private final BarrelTapRepository barrelTapRepository;
     private final LogRepository logRepository;
 
-    public AdminService(BarrelRepository barrelRepository, LogRepository logRepository) {
-        this.barrelRepository = barrelRepository;
+    public AdminService(BarrelTapRepository barrelTapRepository, LogRepository logRepository) {
+        this.barrelTapRepository = barrelTapRepository;
         this.logRepository = logRepository;
     }
 
     public void resetDB() {
-        barrelRepository.deleteAll();
+        barrelTapRepository.deleteAll();
         logRepository.deleteAll();
     }
 }

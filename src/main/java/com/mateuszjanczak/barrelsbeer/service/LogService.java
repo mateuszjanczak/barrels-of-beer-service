@@ -1,6 +1,6 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
-import com.mateuszjanczak.barrelsbeer.domain.entity.Barrel;
+import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.entity.Log;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.LogRepository;
@@ -17,12 +17,13 @@ public class LogService {
         this.logRepository = logRepository;
     }
 
-    public void saveLog(Barrel barrel, LogType logType) {
+    public void saveLog(BarrelTap barrelTap, LogType logType) {
         Log log = new Log();
-        log.setBarrelId(barrel.getId());
-        log.setBarrelName(barrel.getBarrelName());
+        log.setBarrelTapId(barrelTap.getBarrelTapId());
+        log.setBarrelName(barrelTap.getBarrelName());
+        log.setBarrelContent(barrelTap.getBarrelContent());
         log.setLogType(logType);
-        log.setCapacity(barrel.getCapacity());
+        log.setCapacity(barrelTap.getCapacity());
         log.setDate(new Date());
         logRepository.save(log);
     }

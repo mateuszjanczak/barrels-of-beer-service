@@ -6,13 +6,8 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class BarrelAddRequest {
-
+public class BarrelTapAddRequest {
     @Range(min = 1)
     @NotNull
-    int id;
-
-    @Range(min = 1)
-    @NotNull
-    int totalCapacity;
+    int barrelTapId;
 }

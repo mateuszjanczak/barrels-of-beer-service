@@ -26,21 +26,21 @@ public class StatisticsService {
         LocalDateTime now = LocalDateTime.now();
         Date min = convertToDateViaInstant(now.with(LocalTime.MIN));
         Date max = convertToDateViaInstant(now.with(LocalTime.MAX));
-        List<Log> list = logRepository.findLogsByDateBetween(min, max).stream().filter(log -> log.getLogType().equals(LogType.BARREL_HIT)).collect(Collectors.toList());
+        List<Log> list = logRepository.findLogsByDateBetween(min, max).stream().filter(log -> log.getLogType().equals(LogType.BARREL_TAP_HIT)).collect(Collectors.toList());
 
-        Map<String, Long> collect = list.stream().collect(Collectors.groupingBy(Log::getBarrelName, Collectors.counting()));
+        Map<String, Long> collect = list.stream().collect(Collectors.groupingBy(Log::getBarrelContent, Collectors.counting()));
 
         List<DailyStatistics> dailyStatisticsList = new ArrayList<>();
 
         for (Map.Entry<String, Long> entry: collect.entrySet()) {
             DailyStatistics dailyStatistics = new DailyStatistics();
-            dailyStatistics.setBarrelName(entry.getKey());
+            dailyStatistics.setBarrelContent(entry.getKey());
             dailyStatistics.setCount(entry.getValue());
             dailyStatistics.setDate(new Date());
             dailyStatisticsList.add(dailyStatistics);
         }
 
-        dailyStatisticsList.sort(Comparator.comparing(DailyStatistics::getBarrelName));
+        dailyStatisticsList.sort(Comparator.comparing(DailyStatistics::getBarrelContent));
 
         return dailyStatisticsList;
     }

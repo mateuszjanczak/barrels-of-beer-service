@@ -1,10 +1,9 @@
 package com.mateuszjanczak.barrelsbeer.domain.repository;
 
-import com.mateuszjanczak.barrelsbeer.domain.entity.Barrel;
+import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BarrelRepository extends MongoRepository<Barrel, Integer> {
-
+public interface BarrelTapRepository extends MongoRepository<BarrelTap, Integer> {
 }
