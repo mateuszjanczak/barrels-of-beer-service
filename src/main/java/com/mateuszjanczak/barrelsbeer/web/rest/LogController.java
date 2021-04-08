@@ -1,6 +1,7 @@
 package com.mateuszjanczak.barrelsbeer.web.rest;
 
-import com.mateuszjanczak.barrelsbeer.domain.entity.Log;
+import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
+import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTemperatureLog;
 import com.mateuszjanczak.barrelsbeer.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,8 @@ import java.util.List;
 @CrossOrigin
 public class LogController {
 
-    private final static String ALL_LOGS = "/logs";
+    private final static String LOGS_BARREL_TAPS = "/logs/barrelTaps";
+    private final static String LOGS_BARREL_TEMPERATURE = "/logs/barrelTemperature";
 
     private final LogService logService;
 
@@ -22,8 +24,13 @@ public class LogController {
         this.logService = logService;
     }
 
-    @GetMapping(ALL_LOGS)
-    public ResponseEntity<List<Log>> getLogsList(){
-        return new ResponseEntity<>(logService.getLogsList(), HttpStatus.OK);
+    @GetMapping(LOGS_BARREL_TAPS)
+    public ResponseEntity<List<BarrelTapLog>> getBarrelTapLogsList() {
+        return new ResponseEntity<>(logService.getBarrelTapLogsList(), HttpStatus.OK);
+    }
+
+    @GetMapping(LOGS_BARREL_TEMPERATURE)
+    public ResponseEntity<List<BarrelTemperatureLog>> getBarrelTemperatureLogsList() {
+        return new ResponseEntity<>(logService.getBarrelTemperatureLogsList(), HttpStatus.OK);
     }
 }

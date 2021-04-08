@@ -37,7 +37,7 @@ public class BarrelTapController {
     }
 
     @GetMapping(LIST_BARRELS_TAPS)
-    ResponseEntity<List<BarrelTap>> getBarrelTapList(){
+    ResponseEntity<List<BarrelTap>> getBarrelTapList() {
         return new ResponseEntity<>(barrelTapService.getBarrelTapList(), HttpStatus.OK);
     }
 
@@ -54,7 +54,7 @@ public class BarrelTapController {
     }
 
     @GetMapping(HIT_BARREL_TAP)
-    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable long value) {
+    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable String value) {
         Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id, value);
         return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
     }
