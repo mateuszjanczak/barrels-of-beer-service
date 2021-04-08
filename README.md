@@ -1,7 +1,9 @@
 # Barrels of Beer
+
 System obsługi beczek w browarze
 
 # Endpointy
+
 ### Dodaj beczkę
 
 ```
@@ -17,6 +19,7 @@ Response 200 OK
 ```
 
 ### Lista beczek
+
 ```
 GET /barrels
 
@@ -40,6 +43,7 @@ Response 200 OK
 ```
 
 ### Ustaw beczkę
+
 ```
 POST /barrels/{id}/set
 
@@ -53,6 +57,7 @@ Response 200 OK
 ```
 
 ### Sygnał z czujnika
+
 ```
 GET /barrels/{id}/hit
 
@@ -60,6 +65,7 @@ Response 200 OK
 ```
 
 ### Logi
+
 ```
 GET /logs
 
@@ -96,6 +102,7 @@ Response
 ```
 
 Codzienne statystyki
+
 ```
 GET /statistics/daily
 

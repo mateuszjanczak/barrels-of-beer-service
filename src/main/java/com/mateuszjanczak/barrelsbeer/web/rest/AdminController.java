@@ -19,7 +19,7 @@ public class AdminController {
     }
 
     @GetMapping(RESET_DB)
-    public ResponseEntity<?> resetDB(){
+    public ResponseEntity<?> resetDB() {
         adminService.resetDB();
         return new ResponseEntity<>(HttpStatus.OK);
     }

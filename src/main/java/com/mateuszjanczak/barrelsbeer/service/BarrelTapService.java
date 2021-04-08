@@ -7,6 +7,8 @@ import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.mapper.BarrelTapMapper;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
+import com.mateuszjanczak.barrelsbeer.parser.TelemetryData;
+import com.mateuszjanczak.barrelsbeer.parser.TelemetryParser;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,17 +20,19 @@ public class BarrelTapService {
     private final BarrelTapRepository barrelTapRepository;
     private final LogService logService;
     private final BarrelTapMapper barrelTapMapper;
+    private final TelemetryParser telemetryParser;
 
-    public BarrelTapService(BarrelTapRepository barrelTapRepository, LogService logService, BarrelTapMapper barrelTapMapper) {
+    public BarrelTapService(BarrelTapRepository barrelTapRepository, LogService logService, BarrelTapMapper barrelTapMapper, TelemetryParser telemetryParser) {
         this.barrelTapRepository = barrelTapRepository;
         this.logService = logService;
         this.barrelTapMapper = barrelTapMapper;
+        this.telemetryParser = telemetryParser;
     }
 
     public void addBeerTap(BarrelTapAddRequest barrelTapAddRequest) {
         BarrelTap barrelTap = barrelTapMapper.dtoToEntity(barrelTapAddRequest);
         barrelTapRepository.save(barrelTap);
-        logService.saveLog(barrelTap, LogType.BARREL_TAP_NEW);
+        logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_NEW);
     }
 
     public List<BarrelTap> getBarrelTapList() {
@@ -38,32 +42,42 @@ public class BarrelTapService {
     public void setBarrelOnBeerTap(int id, BarrelSetRequest barrelSetRequest) {
         Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
 
-        if(optionalBarrel.isPresent()) {
+        if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
-            if(barrelSetRequest.getCapacity() >= 0) {
+            if (barrelSetRequest.getCapacity() >= 0) {
                 barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent());
                 barrelTap.setBarrelName(barrelSetRequest.getBarrelName());
                 barrelTap.setCapacity(barrelSetRequest.getCapacity());
                 barrelTap.setTotalCapacity(barrelSetRequest.getCapacity());
                 barrelTapRepository.save(barrelTap);
-                logService.saveLog(barrelTap, LogType.BARREL_TAP_SET);
+                logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_SET);
             }
         }
     }
 
-    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, long value) {
+    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, String value) {
         Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
 
-        long newValue = value / 10000000000000L;
+        TelemetryData telemetryData = telemetryParser.parseRawData(value);
 
-        if(optionalBarrel.isPresent()) {
+        if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
-            if(barrelTap.getCapacity() > 0) {
-                barrelTap.setCapacity(barrelTap.getTotalCapacity() - newValue);
+
+            long capacity = (long) (barrelTap.getTotalCapacity() - telemetryData.getFlowCounter());
+
+            if (capacity != barrelTap.getCapacity() && barrelTap.getCapacity() > 0) {
+                barrelTap.setCapacity(capacity);
                 barrelTapRepository.save(barrelTap);
-                logService.saveLog(barrelTap, LogType.BARREL_TAP_READ);
-                return Optional.ofNullable(barrelTapMapper.barrelToHitResponse(barrelTap));
+                logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_READ);
             }
+
+            if (telemetryData.getBarrelTemperature() != barrelTap.getTemperature()) {
+                barrelTap.setTemperature(telemetryData.getBarrelTemperature());
+                barrelTapRepository.save(barrelTap);
+                logService.saveBarrelTemperatureLog(barrelTap);
+            }
+
+            return Optional.ofNullable(barrelTapMapper.barrelToHitResponse(barrelTap));
         }
 
         return Optional.empty();

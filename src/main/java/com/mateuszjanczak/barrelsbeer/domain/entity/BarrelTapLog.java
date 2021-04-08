@@ -1,22 +1,28 @@
 package com.mateuszjanczak.barrelsbeer.domain.entity;
 
+import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Data
 @Document
-public class BarrelTap {
+public class BarrelTapLog {
+
     @Id
+    String id;
+
     int barrelTapId;
 
-    String barrelName = "brak nazwy";
+    String barrelName;
 
-    String barrelContent = "brak zawartości";
+    String barrelContent;
 
-    float temperature;
+    long capacity;
 
-    long capacity = 0;
+    Date date;
 
-    long totalCapacity = 1;
+    LogType logType;
 }

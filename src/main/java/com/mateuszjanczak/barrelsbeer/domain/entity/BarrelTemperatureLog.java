@@ -4,19 +4,21 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Data
 @Document
-public class BarrelTap {
+public class BarrelTemperatureLog {
     @Id
+    String id;
+
     int barrelTapId;
 
-    String barrelName = "brak nazwy";
+    String barrelName;
 
-    String barrelContent = "brak zawartości";
+    String barrelContent;
 
     float temperature;
 
-    long capacity = 0;
-
-    long totalCapacity = 1;
+    Date date;
 }

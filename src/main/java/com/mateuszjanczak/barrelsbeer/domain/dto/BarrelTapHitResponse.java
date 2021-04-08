@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class BarrelTapHitResponse {
     int barrelTapId;
-    long newValue;
+    long newCapacity;
+    float newTemperature;
 }
