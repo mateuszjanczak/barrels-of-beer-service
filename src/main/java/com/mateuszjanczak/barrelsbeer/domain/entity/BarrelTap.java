@@ -12,9 +12,9 @@ public class BarrelTap {
 
     String barrelContent = "brak zawartości";
 
-    int capacity = 0;
+    long capacity = 0;
 
-    int totalCapacity = 1;
+    long totalCapacity = 1;
 
     public int getBarrelTapId() {
         return barrelTapId;
@@ -40,19 +40,19 @@ public class BarrelTap {
         this.barrelName = barrelName;
     }
 
-    public int getCapacity() {
+    public long getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
 
-    public int getTotalCapacity() {
+    public long getTotalCapacity() {
         return totalCapacity;
     }
 
-    public void setTotalCapacity(int totalCapacity) {
+    public void setTotalCapacity(long totalCapacity) {
         this.totalCapacity = totalCapacity;
     }
 }

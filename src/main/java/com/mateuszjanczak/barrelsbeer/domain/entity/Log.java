@@ -18,7 +18,7 @@ public class Log {
 
     String barrelContent;
 
-    int capacity;
+    long capacity;
 
     Date date;
 
@@ -48,12 +48,11 @@ public class Log {
         this.barrelName = barrelName;
     }
 
-
-    public int getCapacity() {
+    public long getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
 

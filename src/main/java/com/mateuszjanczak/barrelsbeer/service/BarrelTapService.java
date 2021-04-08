@@ -51,13 +51,15 @@ public class BarrelTapService {
         }
     }
 
-    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, int value) {
+    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, long value) {
         Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
+
+        long newValue = value / 10000000000000L;
 
         if(optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
             if(barrelTap.getCapacity() > 0) {
-                barrelTap.setCapacity(barrelTap.getTotalCapacity() - value);
+                barrelTap.setCapacity(barrelTap.getTotalCapacity() - newValue);
                 barrelTapRepository.save(barrelTap);
                 logService.saveLog(barrelTap, LogType.BARREL_TAP_READ);
                 return Optional.ofNullable(barrelTapMapper.barrelToHitResponse(barrelTap));
