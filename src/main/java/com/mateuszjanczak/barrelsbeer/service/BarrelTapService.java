@@ -5,7 +5,7 @@ import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapAddRequest;
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapHitResponse;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
-import com.mateuszjanczak.barrelsbeer.domain.mapper.BarrelMapper;
+import com.mateuszjanczak.barrelsbeer.domain.mapper.BarrelTapMapper;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +17,16 @@ public class BarrelTapService {
 
     private final BarrelTapRepository barrelTapRepository;
     private final LogService logService;
-    private final BarrelMapper barrelMapper;
+    private final BarrelTapMapper barrelTapMapper;
 
-    public BarrelTapService(BarrelTapRepository barrelTapRepository, LogService logService, BarrelMapper barrelMapper) {
+    public BarrelTapService(BarrelTapRepository barrelTapRepository, LogService logService, BarrelTapMapper barrelTapMapper) {
         this.barrelTapRepository = barrelTapRepository;
         this.logService = logService;
-        this.barrelMapper = barrelMapper;
+        this.barrelTapMapper = barrelTapMapper;
     }
 
     public void addBeerTap(BarrelTapAddRequest barrelTapAddRequest) {
-        BarrelTap barrelTap = barrelMapper.dtoToEntity(barrelTapAddRequest);
+        BarrelTap barrelTap = barrelTapMapper.dtoToEntity(barrelTapAddRequest);
         barrelTapRepository.save(barrelTap);
         logService.saveLog(barrelTap, LogType.BARREL_TAP_NEW);
     }
@@ -60,7 +60,7 @@ public class BarrelTapService {
                 barrelTap.setCapacity(barrelTap.getTotalCapacity() - value);
                 barrelTapRepository.save(barrelTap);
                 logService.saveLog(barrelTap, LogType.BARREL_TAP_READ);
-                return Optional.ofNullable(barrelMapper.barrelToHitResponse(barrelTap));
+                return Optional.ofNullable(barrelTapMapper.barrelToHitResponse(barrelTap));
             }
         }
 

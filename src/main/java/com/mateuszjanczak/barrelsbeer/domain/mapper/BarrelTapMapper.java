@@ -6,7 +6,7 @@ import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BarrelMapper {
+public class BarrelTapMapper {
     public BarrelTap dtoToEntity(BarrelTapAddRequest barrelTapAddRequest) {
         BarrelTap barrelTap = new BarrelTap();
         barrelTap.setBarrelTapId(barrelTapAddRequest.getBarrelTapId());
@@ -16,7 +16,6 @@ public class BarrelMapper {
     public BarrelTapHitResponse barrelToHitResponse(BarrelTap barrelTap) {
         BarrelTapHitResponse barrelTapHitResponse = new BarrelTapHitResponse();
         barrelTapHitResponse.setBarrelTapId(barrelTap.getBarrelTapId());
-        barrelTapHitResponse.setOldValue(barrelTap.getCapacity() + 1);
         barrelTapHitResponse.setNewValue(barrelTap.getCapacity());
         return barrelTapHitResponse;
     }
