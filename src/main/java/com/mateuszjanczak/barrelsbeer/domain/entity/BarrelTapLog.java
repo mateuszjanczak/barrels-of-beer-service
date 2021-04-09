@@ -22,6 +22,8 @@ public class BarrelTapLog {
 
     long capacity;
 
+    long usage;
+
     Date date;
 
     LogType logType;
