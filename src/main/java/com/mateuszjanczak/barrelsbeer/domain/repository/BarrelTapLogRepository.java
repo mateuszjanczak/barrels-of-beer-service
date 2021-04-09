@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface BarrelTapLogRepository extends MongoRepository<BarrelTapLog, String> {
     List<BarrelTapLog> findLogsByDateBetween(Date date, Date date2);
+    List<BarrelTapLog> findBarrelTapLogsByDateBetweenOrderByIdDesc(Date date, Date date2);
+    List<BarrelTapLog> findBarrelTapLogsByOrderByIdDesc();
 }

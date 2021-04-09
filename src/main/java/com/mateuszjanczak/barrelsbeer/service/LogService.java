@@ -44,7 +44,7 @@ public class LogService {
     }
 
     public List<BarrelTapLog> getBarrelTapLogsList() {
-        return barrelTapLogRepository.findAll();
+        return barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc();
     }
 
     public List<BarrelTemperatureLog> getBarrelTemperatureLogsList() {
