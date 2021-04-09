@@ -27,6 +27,7 @@ public class LogService {
         barrelTapLog.setBarrelName(barrelTap.getBarrelName());
         barrelTapLog.setBarrelContent(barrelTap.getBarrelContent());
         barrelTapLog.setCapacity(barrelTap.getCapacity());
+        barrelTapLog.setUsage(barrelTap.getTotalCapacity() - barrelTap.getCapacity());
         barrelTapLog.setDate(new Date());
         barrelTapLog.setLogType(logType);
         barrelTapLogRepository.save(barrelTapLog);

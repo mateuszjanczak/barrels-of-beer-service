@@ -1,5 +1,6 @@
 package com.mateuszjanczak.barrelsbeer.domain.dto;
 
+import com.mateuszjanczak.barrelsbeer.domain.enums.BarrelContentType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
@@ -12,9 +13,8 @@ public class BarrelSetRequest {
     @NotNull
     String barrelName;
 
-    @NotBlank
     @NotNull
-    String barrelContent;
+    BarrelContentType barrelContent;
 
     @Range(min = 1)
     @NotNull

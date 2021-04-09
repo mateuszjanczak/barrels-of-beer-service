@@ -18,5 +18,5 @@ public class BarrelTap {
 
     long capacity = 0;
 
-    long totalCapacity = 1;
+    long totalCapacity = 0;
 }

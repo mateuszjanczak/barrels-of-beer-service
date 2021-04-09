@@ -45,7 +45,7 @@ public class BarrelTapService {
         if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
             if (barrelSetRequest.getCapacity() >= 0) {
-                barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent());
+                barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent().name().replace("_", " "));
                 barrelTap.setBarrelName(barrelSetRequest.getBarrelName());
                 barrelTap.setCapacity(barrelSetRequest.getCapacity());
                 barrelTap.setTotalCapacity(barrelSetRequest.getCapacity());
