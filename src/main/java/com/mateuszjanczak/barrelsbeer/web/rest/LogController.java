@@ -3,22 +3,18 @@ package com.mateuszjanczak.barrelsbeer.web.rest;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTemperatureLog;
 import com.mateuszjanczak.barrelsbeer.service.LogService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api")
 public class LogController {
 
-    private final static String LOGS_BARREL_TAPS = "/logs/barrelTaps";
-    private final static String LOGS_BARREL_TEMPERATURE = "/logs/barrelTemperature";
+    private final static String LOGS_BARREL_TAPS = "/logs/barrelTaps/{page}";
+    private final static String LOGS_BARREL_TEMPERATURE = "/logs/barrelTemperature/{page}";
 
     private final LogService logService;
 
@@ -27,12 +23,14 @@ public class LogController {
     }
 
     @GetMapping(LOGS_BARREL_TAPS)
-    public ResponseEntity<List<BarrelTapLog>> getBarrelTapLogsList() {
-        return new ResponseEntity<>(logService.getBarrelTapLogsList(), HttpStatus.OK);
+    public ResponseEntity<Page<BarrelTapLog>> getBarrelTapLogsList(@PathVariable int page) {
+        Page<BarrelTapLog> barrelTapLogsList = logService.getBarrelTapLogsList(page);
+        return new ResponseEntity<>(barrelTapLogsList, HttpStatus.OK);
     }
 
     @GetMapping(LOGS_BARREL_TEMPERATURE)
-    public ResponseEntity<List<BarrelTemperatureLog>> getBarrelTemperatureLogsList() {
-        return new ResponseEntity<>(logService.getBarrelTemperatureLogsList(), HttpStatus.OK);
+    public ResponseEntity<Page<BarrelTemperatureLog>> getBarrelTemperatureLogsList(@PathVariable int page) {
+        Page<BarrelTemperatureLog> barrelTemperatureLogsList = logService.getBarrelTemperatureLogsList(page);
+        return new ResponseEntity<>(barrelTemperatureLogsList, HttpStatus.OK);
     }
 }

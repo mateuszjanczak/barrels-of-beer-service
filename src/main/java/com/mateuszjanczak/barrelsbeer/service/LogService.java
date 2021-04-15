@@ -6,10 +6,12 @@ import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTemperatureLog;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTemperatureLogRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class LogService {
@@ -43,11 +45,13 @@ public class LogService {
         barrelTemperatureLogRepository.save(barrelTemperatureLog);
     }
 
-    public List<BarrelTapLog> getBarrelTapLogsList() {
-        return barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc();
+    public Page<BarrelTapLog> getBarrelTapLogsList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return barrelTapLogRepository.findAll(pageable);
     }
 
-    public List<BarrelTemperatureLog> getBarrelTemperatureLogsList() {
-        return barrelTemperatureLogRepository.findAll();
+    public Page<BarrelTemperatureLog> getBarrelTemperatureLogsList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return barrelTemperatureLogRepository.findAll(pageable);
     }
 }
