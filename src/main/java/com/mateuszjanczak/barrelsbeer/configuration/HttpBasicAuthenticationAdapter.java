@@ -20,7 +20,12 @@ public class HttpBasicAuthenticationAdapter extends WebSecurityConfigurerAdapter
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+        // PROD
+        //http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();
+
+        // DEV
+        http.authorizeRequests().anyRequest().permitAll();
+        http.cors().and().csrf().disable();
     }
 
     @Bean
