@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequestMapping(value = "/api")
 public class BarrelTapController {
 
     private final static String LIST_BARRELS_TAPS = "/barrelTaps";
