@@ -44,11 +44,11 @@ public class BarrelTapService {
 
         if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
-            if (barrelSetRequest.getCapacity() >= 0) {
+            if (barrelSetRequest.getTotalCapacity() >= 0) {
                 barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent().name().replace("_", " "));
                 barrelTap.setBarrelName(barrelSetRequest.getBarrelName());
-                barrelTap.setCapacity(barrelSetRequest.getCapacity());
-                barrelTap.setTotalCapacity(barrelSetRequest.getCapacity());
+                barrelTap.setCapacity(barrelSetRequest.getTotalCapacity());
+                barrelTap.setTotalCapacity(barrelSetRequest.getTotalCapacity());
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_SET);
             }
