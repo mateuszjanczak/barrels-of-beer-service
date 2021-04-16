@@ -2,6 +2,7 @@ package com.mateuszjanczak.barrelsbeer.web.rest;
 
 import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
 import com.mateuszjanczak.barrelsbeer.service.StatisticsService;
+import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsBarrelContentType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class StatisticsController {
     }
 
     @GetMapping(EXTENDED_STATISTICS)
-    public ResponseEntity<?> getExtendedStatistics(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") String from, @PathVariable int interval, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") String to) {
+    public ResponseEntity<List<StatisticsBarrelContentType>> getExtendedStatistics(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") String from, @PathVariable int interval, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") String to) {
         return new ResponseEntity<>(statisticsService.getExtendedStatistics(from, to, interval), HttpStatus.OK);
     }
 }

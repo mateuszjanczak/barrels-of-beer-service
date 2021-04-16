@@ -4,13 +4,13 @@ import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
+import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsBarrelContentType;
+import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsDates;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,7 +72,7 @@ public class StatisticsService {
     }
 
     @SneakyThrows
-    public Map<String, Map<String, Long>> getExtendedStatistics(String fromDate, String toDate, int interval) {
+    public List<StatisticsBarrelContentType> getExtendedStatistics(String fromDate, String toDate, int interval) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
@@ -98,22 +98,28 @@ public class StatisticsService {
             groupedByBarrelContentAndDate.put(entry.getKey(), map);
         }
 
-        Map<String, Map<String, Long>> groupedByBarrelContentAndDateSum = new HashMap<>();
+        List<StatisticsBarrelContentType> statisticsBarrelContentTypes = new ArrayList<>();
 
         for(Map.Entry<String, Map<String, List<BarrelTapLog>>> entry: groupedByBarrelContentAndDate.entrySet()) {
 
             Map<String, List<BarrelTapLog>> barrels = entry.getValue();
 
-            Map<String, Long> statisticsMap = new TreeMap<>();
+            List<StatisticsDates> statisticsDatesList = new ArrayList<>();
             for(Map.Entry<String, List<BarrelTapLog>> dates: barrels.entrySet()) {
                 List<BarrelTapLog> barrelTapLogs = dates.getValue();
                 long sum = barrelTapLogs.stream().mapToLong(BarrelTapLog::getSingleUsage).sum();
-                statisticsMap.put(dates.getKey(), sum);
+                StatisticsDates statisticsDates = new StatisticsDates();
+                statisticsDates.setDate(dates.getKey());
+                statisticsDates.setCount(sum);
+                statisticsDatesList.add(statisticsDates);
             }
 
-            groupedByBarrelContentAndDateSum.put(entry.getKey(), statisticsMap);
+            StatisticsBarrelContentType statisticsBarrelContentType = new StatisticsBarrelContentType();
+            statisticsBarrelContentType.setName(entry.getKey());
+            statisticsBarrelContentType.setDates(statisticsDatesList);
+            statisticsBarrelContentTypes.add(statisticsBarrelContentType);
         }
 
-        return groupedByBarrelContentAndDateSum;
+        return statisticsBarrelContentTypes;
     }
 }
