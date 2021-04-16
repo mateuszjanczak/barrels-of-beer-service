@@ -1,13 +1,11 @@
 package com.mateuszjanczak.barrelsbeer.web.rest;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.DailyStatistics;
+import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
 import com.mateuszjanczak.barrelsbeer.service.StatisticsService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +15,7 @@ import java.util.List;
 public class StatisticsController {
 
     private final static String ALL_STATISTICS = "/statistics/all";
+    private final static String EXTENDED_STATISTICS = "/statistics/from/{from}/to/{to}/interval/{interval}";
 
     private final StatisticsService statisticsService;
 
@@ -25,7 +24,12 @@ public class StatisticsController {
     }
 
     @GetMapping(ALL_STATISTICS)
-    public ResponseEntity<List<DailyStatistics>> getAllStatistics() {
+    public ResponseEntity<List<GlobalStatistics>> getAllStatistics() {
         return new ResponseEntity<>(statisticsService.getAllStatistics(), HttpStatus.OK);
+    }
+
+    @GetMapping(EXTENDED_STATISTICS)
+    public ResponseEntity<?> getExtendedStatistics(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") String from, @PathVariable int interval, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") String to) {
+        return new ResponseEntity<>(statisticsService.getExtendedStatistics(from, to, interval), HttpStatus.OK);
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class DailyStatistics {
+public class GlobalStatistics {
     Date date;
     String barrelContent;
     Long count;

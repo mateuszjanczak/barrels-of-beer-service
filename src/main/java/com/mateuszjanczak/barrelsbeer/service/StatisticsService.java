@@ -1,11 +1,14 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.DailyStatistics;
+import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -20,14 +23,7 @@ public class StatisticsService {
         this.barrelTapLogRepository = barrelTapLogRepository;
     }
 
-    public List<DailyStatistics> getAllStatistics() {
-
-       /* LocalDateTime now = LocalDateTime.now();
-        Date min = convertToDateViaInstant(now.with(LocalTime.MIN));
-        Date max = convertToDateViaInstant(now.with(LocalTime.MAX));
-
-        List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByDateBetweenOrderByIdDesc(min, max).stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
-*/
+    public List<GlobalStatistics> getAllStatistics() {
         List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
 
         Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
@@ -60,22 +56,64 @@ public class StatisticsService {
             }
         }
 
-        List<DailyStatistics> dailyStatisticsList = new ArrayList<>();
+        List<GlobalStatistics> globalStatisticsList = new ArrayList<>();
 
         for (Map.Entry<String, Long> entry : map.entrySet()) {
-            DailyStatistics dailyStatistics = new DailyStatistics();
-            dailyStatistics.setBarrelContent(entry.getKey());
-            dailyStatistics.setCount(entry.getValue());
-            dailyStatistics.setDate(new Date());
-            dailyStatisticsList.add(dailyStatistics);
+            GlobalStatistics globalStatistics = new GlobalStatistics();
+            globalStatistics.setBarrelContent(entry.getKey());
+            globalStatistics.setCount(entry.getValue());
+            globalStatistics.setDate(new Date());
+            globalStatisticsList.add(globalStatistics);
         }
 
-        dailyStatisticsList.sort(Comparator.comparing(DailyStatistics::getCount).reversed());
+        globalStatisticsList.sort(Comparator.comparing(GlobalStatistics::getCount).reversed());
 
-        return dailyStatisticsList;
+        return globalStatisticsList;
     }
 
-    private Date convertToDateViaInstant(LocalDateTime dateToConvert) {
-        return Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
+    @SneakyThrows
+    public Map<String, Map<String, Long>> getExtendedStatistics(String fromDate, String toDate, int interval) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
+
+        Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
+
+        Map<String, Map<String, List<BarrelTapLog>>> groupedByBarrelContentAndDate = new HashMap<>();
+
+        for(Map.Entry<String, List<BarrelTapLog>> entry: groupedByBarrelContent.entrySet()) {
+            List<BarrelTapLog> elements = entry.getValue();
+
+            Date min = formatter.parse(fromDate);
+            Date max = formatter.parse(toDate);
+
+            Map<String, List<BarrelTapLog>> map = new HashMap<>();
+            for (Date from = min, to = DateUtils.addMinutes(from, interval); from.before(max); from = DateUtils.addMinutes(from, interval), to = DateUtils.addMinutes(to, interval)) {
+                Date finalFrom = from;
+                Date finalTo = to;
+                List<BarrelTapLog> betweenList = elements.stream().filter(barrelTapLog -> barrelTapLog.getDate().after(finalFrom) && barrelTapLog.getDate().before(finalTo)).collect(Collectors.toList());
+                String key = formatter.format(from) + " - " + formatter.format(to);
+                map.put(key, betweenList);
+            }
+            groupedByBarrelContentAndDate.put(entry.getKey(), map);
+        }
+
+        Map<String, Map<String, Long>> groupedByBarrelContentAndDateSum = new HashMap<>();
+
+        for(Map.Entry<String, Map<String, List<BarrelTapLog>>> entry: groupedByBarrelContentAndDate.entrySet()) {
+
+            Map<String, List<BarrelTapLog>> barrels = entry.getValue();
+
+            Map<String, Long> statisticsMap = new TreeMap<>();
+            for(Map.Entry<String, List<BarrelTapLog>> dates: barrels.entrySet()) {
+                List<BarrelTapLog> barrelTapLogs = dates.getValue();
+                long sum = barrelTapLogs.stream().mapToLong(BarrelTapLog::getSingleUsage).sum();
+                statisticsMap.put(dates.getKey(), sum);
+            }
+
+            groupedByBarrelContentAndDateSum.put(entry.getKey(), statisticsMap);
+        }
+
+        return groupedByBarrelContentAndDateSum;
     }
 }
