@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping(value = "/api")
 public class StatisticsController {
 
-    private final static String DAILY_STATISTICS = "/statistics/daily";
+    private final static String ALL_STATISTICS = "/statistics/all";
 
     private final StatisticsService statisticsService;
 
@@ -24,8 +24,8 @@ public class StatisticsController {
         this.statisticsService = statisticsService;
     }
 
-    @GetMapping(DAILY_STATISTICS)
-    public ResponseEntity<List<DailyStatistics>> getDailyStatistics() {
-        return new ResponseEntity<>(statisticsService.getDailyStatistics(), HttpStatus.OK);
+    @GetMapping(ALL_STATISTICS)
+    public ResponseEntity<List<DailyStatistics>> getAllStatistics() {
+        return new ResponseEntity<>(statisticsService.getAllStatistics(), HttpStatus.OK);
     }
 }

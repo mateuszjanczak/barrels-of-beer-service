@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+//@Component
 public class SensorScheduler {
 
     private final BarrelTapService barrelTapService;
@@ -30,7 +30,7 @@ public class SensorScheduler {
         restTemplate = new RestTemplate();
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000)
     public void readData() {
         for(BarrelTap barrelTap: barrelTapList) {
             int barrelTapId = barrelTap.getBarrelTapId();

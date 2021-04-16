@@ -20,7 +20,7 @@ public class StatisticsService {
         this.barrelTapLogRepository = barrelTapLogRepository;
     }
 
-    public List<DailyStatistics> getDailyStatistics() {
+    public List<DailyStatistics> getAllStatistics() {
 
        /* LocalDateTime now = LocalDateTime.now();
         Date min = convertToDateViaInstant(now.with(LocalTime.MIN));
@@ -39,7 +39,7 @@ public class StatisticsService {
             List<BarrelTapLog> barrelTapLogs = entry.getValue();
             for (int i = 0, barrelTapLogsSize = barrelTapLogs.size(); i < barrelTapLogsSize; i++) {
 
-                long first = barrelTapLogs.get(i).getUsage();
+                long first = barrelTapLogs.get(i).getTotalUsage();
 
                 if(i == barrelTapLogs.size() - 1) {
                     sum += first;
@@ -47,7 +47,7 @@ public class StatisticsService {
                     break;
                 }
 
-                long second = barrelTapLogs.get(i+1).getUsage();
+                long second = barrelTapLogs.get(i+1).getTotalUsage();
                 long diff = first - second;
 
                 if(diff > 0) {
