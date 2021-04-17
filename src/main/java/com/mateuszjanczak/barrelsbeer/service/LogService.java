@@ -32,11 +32,11 @@ public class LogService {
         barrelTapLog.setBarrelTapId(barrelTap.getBarrelTapId());
         barrelTapLog.setBarrelName(barrelTap.getBarrelName());
         barrelTapLog.setBarrelContent(barrelTap.getBarrelContent());
-        barrelTapLog.setCapacity(barrelTap.getCapacity());
-        barrelTapLog.setTotalUsage(barrelTap.getTotalCapacity() - barrelTap.getCapacity());
+        barrelTapLog.setCurrentLevel(barrelTap.getCurrentLevel());
+        barrelTapLog.setTotalUsage(barrelTap.getCapacity() - barrelTap.getCurrentLevel());
 
         if(logType == LogType.BARREL_TAP_READ) {
-            barrelTapLog.setSingleUsage(barrelTap.getTotalCapacity() - barrelTap.getCapacity() - getLastTotalUsage(barrelTap.getBarrelTapId()));
+            barrelTapLog.setSingleUsage(barrelTap.getCapacity() - barrelTap.getCurrentLevel() - getLastTotalUsage(barrelTap.getBarrelTapId()));
         } else {
             barrelTapLog.setSingleUsage(0);
         }
@@ -60,17 +60,17 @@ public class LogService {
             barrelTemperatureLog.setTemperature(barrelTap.getTemperature());
             barrelTemperatureLog.setDate(new Date());
             barrelTemperatureLogRepository.save(barrelTemperatureLog);
-            temperatureDate = convertToDateViaInstant(LocalDateTime.now().plusMinutes(1));
+            temperatureDate = convertToDateViaInstant(LocalDateTime.now().plusMinutes(5));
         }
     }
 
     public Page<BarrelTapLog> getBarrelTapLogsList(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 20);
         return barrelTapLogRepository.findAll(pageable);
     }
 
     public Page<BarrelTemperatureLog> getBarrelTemperatureLogsList(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 20);
         return barrelTemperatureLogRepository.findAll(pageable);
     }
 

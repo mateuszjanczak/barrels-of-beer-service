@@ -16,7 +16,7 @@ public class BarrelTapMapper {
     public BarrelTapHitResponse barrelToHitResponse(BarrelTap barrelTap) {
         BarrelTapHitResponse barrelTapHitResponse = new BarrelTapHitResponse();
         barrelTapHitResponse.setBarrelTapId(barrelTap.getBarrelTapId());
-        barrelTapHitResponse.setNewCapacity(barrelTap.getCapacity());
+        barrelTapHitResponse.setNewCapacity(barrelTap.getCurrentLevel());
         barrelTapHitResponse.setNewTemperature(barrelTap.getTemperature());
         return barrelTapHitResponse;
     }

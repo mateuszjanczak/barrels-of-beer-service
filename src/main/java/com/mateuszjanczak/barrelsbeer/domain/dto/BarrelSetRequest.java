@@ -18,5 +18,5 @@ public class BarrelSetRequest {
 
     @Range(min = 1)
     @NotNull
-    int totalCapacity;
+    int capacity;
 }

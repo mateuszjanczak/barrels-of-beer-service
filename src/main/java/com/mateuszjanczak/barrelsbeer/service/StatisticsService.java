@@ -114,6 +114,8 @@ public class StatisticsService {
                 statisticsDatesList.add(statisticsDates);
             }
 
+            statisticsDatesList.sort(Comparator.comparing(StatisticsDates::getDate));
+
             StatisticsBarrelContentType statisticsBarrelContentType = new StatisticsBarrelContentType();
             statisticsBarrelContentType.setName(entry.getKey());
             statisticsBarrelContentType.setDates(statisticsDatesList);

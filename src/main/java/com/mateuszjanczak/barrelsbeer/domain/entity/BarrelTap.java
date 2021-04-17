@@ -16,7 +16,7 @@ public class BarrelTap {
 
     float temperature;
 
-    long capacity = 0;
+    long currentLevel = 0;
 
-    long totalCapacity = 0;
+    long capacity = 0;
 }

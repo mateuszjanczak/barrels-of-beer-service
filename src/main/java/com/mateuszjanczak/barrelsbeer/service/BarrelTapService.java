@@ -44,11 +44,11 @@ public class BarrelTapService {
 
         if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
-            if (barrelSetRequest.getTotalCapacity() >= 0) {
+            if (barrelSetRequest.getCapacity() >= 0) {
                 barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent().name().replace("_", " "));
                 barrelTap.setBarrelName(barrelSetRequest.getBarrelName());
-                barrelTap.setCapacity(barrelSetRequest.getTotalCapacity());
-                barrelTap.setTotalCapacity(barrelSetRequest.getTotalCapacity());
+                barrelTap.setCurrentLevel(barrelSetRequest.getCapacity());
+                barrelTap.setCapacity(barrelSetRequest.getCapacity());
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_SET);
             }
@@ -63,10 +63,10 @@ public class BarrelTapService {
         if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
 
-            long capacity = (long) (barrelTap.getTotalCapacity() - telemetryData.getFlowCounter());
+            long capacity = (long) (barrelTap.getCapacity() - telemetryData.getFlowCounter());
 
-            if (capacity != barrelTap.getCapacity() && barrelTap.getCapacity() > 0) {
-                barrelTap.setCapacity(capacity);
+            if (capacity != barrelTap.getCurrentLevel() && barrelTap.getCurrentLevel() > 0) {
+                barrelTap.setCurrentLevel(capacity);
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_READ);
             }

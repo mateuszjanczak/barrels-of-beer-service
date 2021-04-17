@@ -22,7 +22,7 @@ public class BarrelTapLog {
 
     String barrelContent;
 
-    long capacity;
+    long currentLevel;
 
     long totalUsage;
 
