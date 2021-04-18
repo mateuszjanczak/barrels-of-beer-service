@@ -73,7 +73,7 @@ public class BarrelTapService {
 
             long capacity = barrelTap.getCapacity() - currentLevel;
 
-            if (currentLevel != barrelTap.getCurrentLevel() && barrelTap.getCurrentLevel() > 0) {
+            if (capacity != barrelTap.getCurrentLevel() && barrelTap.getCurrentLevel() > 0) {
                 barrelTap.setCurrentLevel(capacity);
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_READ);

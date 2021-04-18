@@ -22,13 +22,11 @@ public class LogService {
     private final BarrelTapLogRepository barrelTapLogRepository;
     private final BarrelTemperatureLogRepository barrelTemperatureLogRepository;
     private final CsvService csvService;
-    private Date temperatureDate;
 
     public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository, CsvService csvService) {
         this.barrelTapLogRepository = barrelTapLogRepository;
         this.barrelTemperatureLogRepository = barrelTemperatureLogRepository;
         this.csvService = csvService;
-        temperatureDate = new Date(0);
     }
 
     public void saveBarrelTapLog(BarrelTap barrelTap, LogType logType) {
@@ -55,17 +53,13 @@ public class LogService {
     }
 
     public void saveBarrelTemperatureLog(BarrelTap barrelTap) {
-        Date now = new Date();
-        if(now.after(temperatureDate)) {
-            BarrelTemperatureLog barrelTemperatureLog = new BarrelTemperatureLog();
-            barrelTemperatureLog.setBarrelTapId(barrelTap.getBarrelTapId());
-            barrelTemperatureLog.setBarrelName(barrelTap.getBarrelName());
-            barrelTemperatureLog.setBarrelContent(barrelTap.getBarrelContent());
-            barrelTemperatureLog.setTemperature(barrelTap.getTemperature());
-            barrelTemperatureLog.setDate(new Date());
-            barrelTemperatureLogRepository.save(barrelTemperatureLog);
-            temperatureDate = convertToDateViaInstant(LocalDateTime.now().plusMinutes(5));
-        }
+        BarrelTemperatureLog barrelTemperatureLog = new BarrelTemperatureLog();
+        barrelTemperatureLog.setBarrelTapId(barrelTap.getBarrelTapId());
+        barrelTemperatureLog.setBarrelName(barrelTap.getBarrelName());
+        barrelTemperatureLog.setBarrelContent(barrelTap.getBarrelContent());
+        barrelTemperatureLog.setTemperature(barrelTap.getTemperature());
+        barrelTemperatureLog.setDate(new Date());
+        barrelTemperatureLogRepository.save(barrelTemperatureLog);
     }
 
     public Page<BarrelTapLog> getBarrelTapLogsList(int page) {
@@ -76,10 +70,6 @@ public class LogService {
     public Page<BarrelTemperatureLog> getBarrelTemperatureLogsList(int page) {
         Pageable pageable = PageRequest.of(page, 20);
         return barrelTemperatureLogRepository.findAll(pageable);
-    }
-
-    private Date convertToDateViaInstant(LocalDateTime dateToConvert) {
-        return Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public ByteArrayInputStream getBarrelTapLogsListCsv() {
