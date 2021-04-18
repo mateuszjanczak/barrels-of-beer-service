@@ -35,15 +35,15 @@ public class TelemetryParser {
         String binaryData = hexToBin(hexData);
 
         String strPattern = "^0+";
-        String binaryFlowCounter = binaryData.substring(0, 32).replaceAll(strPattern, "");
+        String binaryBarrelCurrentLevel = binaryData.substring(0, 32).replaceAll(strPattern, "");
         String binaryBarrelTemperature = binaryData.substring(48, 62);
 
-        float flowCounter = Float.intBitsToFloat(Integer.parseInt(binaryFlowCounter, 2)) * 1000;
+        float barrelCurrentLevel = Float.intBitsToFloat(Integer.parseInt(binaryBarrelCurrentLevel, 2)) * 1000;
         float barrelTemperature = Integer.parseInt(binaryBarrelTemperature, 2) / 10.0f;
 
         TelemetryData telemetryData = new TelemetryData();
-        telemetryData.setFlowCounter(flowCounter);
-        telemetryData.setBarrelTemperature(barrelTemperature);
+        telemetryData.setCurrentLevel((long) barrelCurrentLevel);
+        telemetryData.setTemperature(barrelTemperature);
 
         return telemetryData;
     }
@@ -55,4 +55,5 @@ public class TelemetryParser {
             binaryString.append(digitsMap.get(String.valueOf(h)));
         }
         return binaryString.toString();
-    }}
+    }
+}

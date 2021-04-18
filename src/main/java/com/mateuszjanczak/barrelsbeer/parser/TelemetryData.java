@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class TelemetryData {
-    float barrelTemperature;
-    float flowCounter;
+    long currentLevel;
+    float temperature;
 }

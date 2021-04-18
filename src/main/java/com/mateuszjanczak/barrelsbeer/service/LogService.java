@@ -24,7 +24,7 @@ public class LogService {
     public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository) {
         this.barrelTapLogRepository = barrelTapLogRepository;
         this.barrelTemperatureLogRepository = barrelTemperatureLogRepository;
-        temperatureDate = new Date();
+        temperatureDate = new Date(0);
     }
 
     public void saveBarrelTapLog(BarrelTap barrelTap, LogType logType) {

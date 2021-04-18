@@ -56,23 +56,31 @@ public class BarrelTapService {
     }
 
     public Optional<BarrelTapHitResponse> hitBarrelTap(int id, String value) {
-        Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
-
         TelemetryData telemetryData = telemetryParser.parseRawData(value);
+        return hitBarrelTap(id, telemetryData.getCurrentLevel(), telemetryData.getTemperature());
+    }
+
+    public BarrelTap getBarrelTapById(int id) {
+        Optional<BarrelTap> optionalBarrelTap = barrelTapRepository.findById(id);
+        return optionalBarrelTap.orElse(null);
+    }
+
+    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, long currentLevel, float temperature) {
+        Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
 
         if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
 
-            long capacity = (long) (barrelTap.getCapacity() - telemetryData.getFlowCounter());
+            long capacity = barrelTap.getCapacity() - currentLevel;
 
-            if (capacity != barrelTap.getCurrentLevel() && barrelTap.getCurrentLevel() > 0) {
+            if (currentLevel != barrelTap.getCurrentLevel() && barrelTap.getCurrentLevel() > 0) {
                 barrelTap.setCurrentLevel(capacity);
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_READ);
             }
 
-            if (telemetryData.getBarrelTemperature() != barrelTap.getTemperature()) {
-                barrelTap.setTemperature(telemetryData.getBarrelTemperature());
+            if (temperature != barrelTap.getTemperature()) {
+                barrelTap.setTemperature(temperature);
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTemperatureLog(barrelTap);
             }
@@ -81,10 +89,5 @@ public class BarrelTapService {
         }
 
         return Optional.empty();
-    }
-
-    public BarrelTap getBarrelTapById(int id) {
-        Optional<BarrelTap> optionalBarrelTap = barrelTapRepository.findById(id);
-        return optionalBarrelTap.orElse(null);
     }
 }

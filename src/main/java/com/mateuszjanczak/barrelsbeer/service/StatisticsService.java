@@ -1,11 +1,11 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
 import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
+import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsBarrelContentType;
+import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsDates;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
-import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsBarrelContentType;
-import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsDates;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class StatisticsService {
         this.barrelTapLogRepository = barrelTapLogRepository;
     }
 
-    public List<GlobalStatistics> getAllStatistics() {
+    public List<GlobalStatistics> getRanking() {
         List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
 
         Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
@@ -72,7 +72,7 @@ public class StatisticsService {
     }
 
     @SneakyThrows
-    public List<StatisticsBarrelContentType> getExtendedStatistics(String fromDate, String toDate, int interval) {
+    public List<StatisticsBarrelContentType> getStatistics(String fromDate, String toDate, int interval) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());

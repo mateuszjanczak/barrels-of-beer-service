@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/admin")
 public class AdminController {
     private final static String RESET_DB = "/reset-db";
+    private final static String ENABLE_TAPS = "/enable-taps";
+    private final static String DISABLE_TAPS = "/disable-taps";
 
     private final AdminService adminService;
 
@@ -23,6 +25,18 @@ public class AdminController {
     @GetMapping(RESET_DB)
     public ResponseEntity<?> resetDB() {
         adminService.resetDB();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(ENABLE_TAPS)
+    public ResponseEntity<?> enableTaps() {
+        adminService.enableTaps();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(DISABLE_TAPS)
+    public ResponseEntity<?> disableTaps() {
+        adminService.disableTaps();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
