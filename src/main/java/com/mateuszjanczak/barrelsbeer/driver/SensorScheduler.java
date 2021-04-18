@@ -48,11 +48,11 @@ public class SensorScheduler {
                     barrelTapService.hitBarrelTap(barrelTapId, hex);
                     System.out.println("TAP ID: " + barrelTapId + ", URL: " + url + ", HEX: " + hex);
                 } else {
-                    System.err.println(new Date() + "Error with the controller");
+                    System.err.println(new Date() + " Error with the controller");
                 }
                 System.out.println("UPDATED: " + new Date());
             } catch (ResourceAccessException ex) {
-                System.err.println(new Date() + "No connection with the controller");
+                System.err.println(new Date() + " No connection with the controller");
             }
         }
     }

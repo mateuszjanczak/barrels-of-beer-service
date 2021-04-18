@@ -11,19 +11,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class LogService {
     private final BarrelTapLogRepository barrelTapLogRepository;
     private final BarrelTemperatureLogRepository barrelTemperatureLogRepository;
+    private final CsvService csvService;
     private Date temperatureDate;
 
-    public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository) {
+    public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository, CsvService csvService) {
         this.barrelTapLogRepository = barrelTapLogRepository;
         this.barrelTemperatureLogRepository = barrelTemperatureLogRepository;
+        this.csvService = csvService;
         temperatureDate = new Date(0);
     }
 
@@ -76,5 +80,10 @@ public class LogService {
 
     private Date convertToDateViaInstant(LocalDateTime dateToConvert) {
         return Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public ByteArrayInputStream getBarrelTapLogsListCsv() {
+        List<BarrelTapLog> barrelTapLogs = barrelTapLogRepository.findAll();
+        return csvService.load(barrelTapLogs);
     }
 }

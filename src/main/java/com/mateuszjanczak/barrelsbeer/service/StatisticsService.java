@@ -1,8 +1,8 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
-import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsBarrelContentType;
-import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsDates;
+import com.mateuszjanczak.barrelsbeer.domain.dto.Ranking;
+import com.mateuszjanczak.barrelsbeer.domain.dto.statistics.StatisticsBarrelContentType;
+import com.mateuszjanczak.barrelsbeer.domain.dto.statistics.StatisticsData;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
@@ -23,7 +23,7 @@ public class StatisticsService {
         this.barrelTapLogRepository = barrelTapLogRepository;
     }
 
-    public List<GlobalStatistics> getRanking() {
+    public List<Ranking> getRanking() {
         List<BarrelTapLog> list = barrelTapLogRepository.findBarrelTapLogsByOrderByIdDesc().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
 
         Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
@@ -56,19 +56,19 @@ public class StatisticsService {
             }
         }
 
-        List<GlobalStatistics> globalStatisticsList = new ArrayList<>();
+        List<Ranking> rankingList = new ArrayList<>();
 
         for (Map.Entry<String, Long> entry : map.entrySet()) {
-            GlobalStatistics globalStatistics = new GlobalStatistics();
-            globalStatistics.setBarrelContent(entry.getKey());
-            globalStatistics.setCount(entry.getValue());
-            globalStatistics.setDate(new Date());
-            globalStatisticsList.add(globalStatistics);
+            Ranking ranking = new Ranking();
+            ranking.setBarrelContent(entry.getKey());
+            ranking.setCount(entry.getValue());
+            ranking.setDate(new Date());
+            rankingList.add(ranking);
         }
 
-        globalStatisticsList.sort(Comparator.comparing(GlobalStatistics::getCount).reversed());
+        rankingList.sort(Comparator.comparing(Ranking::getCount).reversed());
 
-        return globalStatisticsList;
+        return rankingList;
     }
 
     @SneakyThrows
@@ -104,21 +104,21 @@ public class StatisticsService {
 
             Map<String, List<BarrelTapLog>> barrels = entry.getValue();
 
-            List<StatisticsDates> statisticsDatesList = new ArrayList<>();
+            List<StatisticsData> statisticsItems = new ArrayList<>();
             for(Map.Entry<String, List<BarrelTapLog>> dates: barrels.entrySet()) {
                 List<BarrelTapLog> barrelTapLogs = dates.getValue();
                 long sum = barrelTapLogs.stream().mapToLong(BarrelTapLog::getSingleUsage).sum();
-                StatisticsDates statisticsDates = new StatisticsDates();
-                statisticsDates.setDate(dates.getKey());
-                statisticsDates.setCount(sum);
-                statisticsDatesList.add(statisticsDates);
+                StatisticsData statisticsData = new StatisticsData();
+                statisticsData.setDate(dates.getKey());
+                statisticsData.setCount(sum);
+                statisticsItems.add(statisticsData);
             }
 
-            statisticsDatesList.sort(Comparator.comparing(StatisticsDates::getDate));
+            statisticsItems.sort(Comparator.comparing(StatisticsData::getDate));
 
             StatisticsBarrelContentType statisticsBarrelContentType = new StatisticsBarrelContentType();
             statisticsBarrelContentType.setName(entry.getKey());
-            statisticsBarrelContentType.setDates(statisticsDatesList);
+            statisticsBarrelContentType.setItems(statisticsItems);
             statisticsBarrelContentTypes.add(statisticsBarrelContentType);
         }
 

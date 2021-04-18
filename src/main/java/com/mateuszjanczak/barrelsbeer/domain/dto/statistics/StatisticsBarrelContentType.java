@@ -1,4 +1,4 @@
-package com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics;
+package com.mateuszjanczak.barrelsbeer.domain.dto.statistics;
 
 import lombok.Data;
 
@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class StatisticsBarrelContentType {
     String name;
-    List<StatisticsDates> dates;
+    List<StatisticsData> items;
 }

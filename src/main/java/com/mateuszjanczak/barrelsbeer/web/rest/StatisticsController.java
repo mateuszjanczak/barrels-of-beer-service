@@ -1,7 +1,7 @@
 package com.mateuszjanczak.barrelsbeer.web.rest;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.GlobalStatistics;
-import com.mateuszjanczak.barrelsbeer.domain.dto.extendedstatistics.StatisticsBarrelContentType;
+import com.mateuszjanczak.barrelsbeer.domain.dto.Ranking;
+import com.mateuszjanczak.barrelsbeer.domain.dto.statistics.StatisticsBarrelContentType;
 import com.mateuszjanczak.barrelsbeer.service.StatisticsService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class StatisticsController {
     }
 
     @GetMapping(RANKING)
-    public ResponseEntity<List<GlobalStatistics>> getRanking() {
+    public ResponseEntity<List<Ranking>> getRanking() {
         return new ResponseEntity<>(statisticsService.getRanking(), HttpStatus.OK);
     }
 
