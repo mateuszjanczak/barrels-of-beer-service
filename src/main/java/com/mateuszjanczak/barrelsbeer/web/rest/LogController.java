@@ -22,6 +22,7 @@ public class LogController {
     private final static String LOGS_BARREL_TAPS_CSV = "/logs/barrelTaps/csv";
     private final static String LOGS_BARREL_TEMPERATURE = "/logs/barrelTemperature/{page}";
     private final static String LOGS_BEERS = "/logs/beers/{page}";
+    private final static String LOGS_BEERS_UPDATE = "/logs/beers/update";
 
     private final LogService logService;
 
@@ -54,5 +55,11 @@ public class LogController {
     public ResponseEntity<Page<BeerLog>> getBeerStatisticsList(@PathVariable int page) {
         Page<BeerLog> beerLogsList = logService.getBeerStatisticsList(page);
         return new ResponseEntity<>(beerLogsList, HttpStatus.OK);
+    }
+
+    @PostMapping(LOGS_BEERS_UPDATE)
+    public ResponseEntity<Void> generateBeerStatistics() {
+        logService.generateBeerStatistics();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

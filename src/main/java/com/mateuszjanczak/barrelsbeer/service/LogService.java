@@ -82,13 +82,12 @@ public class LogService {
     }
 
     public Page<BeerLog> getBeerStatisticsList(int page) {
-        generateBeerStatistics();
         Pageable pageable = PageRequest.of(page, 20);
-        return beerLogRepository.findAll(pageable);
+        return beerLogRepository.findBeerLogsByOrderByEndDate(pageable);
     }
 
     @SneakyThrows
-    private void generateBeerStatistics() {
+    public void generateBeerStatistics() {
         Optional<BeerLog> lastBeerLog = beerLogRepository.findFirstByOrderByIdDesc();
 
         List<BarrelTapLog> list;
@@ -114,7 +113,7 @@ public class LogService {
                 if (barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)) {
                     long diff = getDateDiff(lastDate, barrelTapLog.getDate(), TimeUnit.SECONDS);
 
-                    if (diff < 30 && i != barrelTapLogsSize - 1) {
+                    if (diff < 5 && i != barrelTapLogsSize - 1) {
                         amount += barrelTapLog.getSingleUsage();
                         tempList.add(barrelTapLog);
                     } else {
