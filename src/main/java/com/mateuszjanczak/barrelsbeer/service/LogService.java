@@ -3,29 +3,33 @@ package com.mateuszjanczak.barrelsbeer.service;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTapLog;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTemperatureLog;
+import com.mateuszjanczak.barrelsbeer.domain.entity.BeerLog;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTemperatureLogRepository;
+import com.mateuszjanczak.barrelsbeer.domain.repository.BeerLogRepository;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class LogService {
     private final BarrelTapLogRepository barrelTapLogRepository;
     private final BarrelTemperatureLogRepository barrelTemperatureLogRepository;
+    private final BeerLogRepository beerLogRepository;
     private final CsvService csvService;
 
-    public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository, CsvService csvService) {
+    public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository, BeerLogRepository beerLogRepository, CsvService csvService) {
         this.barrelTapLogRepository = barrelTapLogRepository;
         this.barrelTemperatureLogRepository = barrelTemperatureLogRepository;
+        this.beerLogRepository = beerLogRepository;
         this.csvService = csvService;
     }
 
@@ -75,5 +79,69 @@ public class LogService {
     public ByteArrayInputStream getBarrelTapLogsListCsv() {
         List<BarrelTapLog> barrelTapLogs = barrelTapLogRepository.findAll();
         return csvService.load(barrelTapLogs);
+    }
+
+    public Page<BeerLog> getBeerStatisticsList(int page) {
+        generateBeerStatistics();
+        Pageable pageable = PageRequest.of(page, 20);
+        return beerLogRepository.findAll(pageable);
+    }
+
+    @SneakyThrows
+    private void generateBeerStatistics() {
+        Optional<BeerLog> lastBeerLog = beerLogRepository.findFirstByOrderByIdDesc();
+
+        List<BarrelTapLog> list;
+
+        if(lastBeerLog.isPresent()) {
+            Date lastDate = lastBeerLog.get().getEndDate();
+            list = barrelTapLogRepository.findBarrelTapLogByDateAfter(lastDate).stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
+        } else {
+            list = barrelTapLogRepository.findAll().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
+        }
+
+        Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
+
+        for (Map.Entry<String, List<BarrelTapLog>> entry: groupedByBarrelContent.entrySet()) {
+            List<BarrelTapLog> barrelTapLogs = entry.getValue();
+
+            Date lastDate = barrelTapLogs.get(0).getDate();
+            long amount = 0;
+
+            List<BarrelTapLog> tempList = new ArrayList<>();
+            for (int i = 0, barrelTapLogsSize = barrelTapLogs.size(); i < barrelTapLogsSize; i++) {
+                BarrelTapLog barrelTapLog = barrelTapLogs.get(i);
+                if (barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)) {
+                    long diff = getDateDiff(lastDate, barrelTapLog.getDate(), TimeUnit.SECONDS);
+
+                    if (diff < 30 && i != barrelTapLogsSize - 1) {
+                        amount += barrelTapLog.getSingleUsage();
+                        tempList.add(barrelTapLog);
+                    } else {
+                        if(i == barrelTapLogsSize - 1) {
+                            amount += barrelTapLog.getSingleUsage();
+                            tempList.add(barrelTapLog);
+                        }
+                        BeerLog beerLog = new BeerLog();
+                        beerLog.setBarrelContent(barrelTapLog.getBarrelContent());
+                        beerLog.setStartDate(tempList.get(0).getDate());
+                        beerLog.setEndDate(tempList.get(tempList.size() - 1).getDate());
+                        beerLog.setAmount(amount);
+                        beerLog.setBarrelTapLogs(tempList.stream().map(BarrelTapLog::getId).collect(Collectors.toList()));
+                        beerLogRepository.save(beerLog);
+                        amount = 0;
+                        tempList = new ArrayList<>();
+                    }
+                } else {
+                    amount = 0;
+                }
+                lastDate = barrelTapLog.getDate();
+            }
+        }
+    }
+
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 }

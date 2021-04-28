@@ -1,31 +1,27 @@
 package com.mateuszjanczak.barrelsbeer.domain.entity;
 
-import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Document
-public class BarrelTapLog {
+@ToString
+public class BeerLog {
     @Id
     String id;
 
-    int barrelTapId;
-
-    String barrelName;
-
     String barrelContent;
 
-    long currentLevel;
+    List<String> barrelTapLogs;
 
-    long totalUsage;
+    long amount;
 
-    long singleUsage;
+    Date startDate;
 
-    Date date;
-
-    LogType logType;
+    Date endDate;
 }
