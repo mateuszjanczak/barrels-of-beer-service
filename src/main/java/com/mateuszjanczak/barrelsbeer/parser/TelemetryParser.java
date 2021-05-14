@@ -34,8 +34,7 @@ public class TelemetryParser {
         String hexData = value.trim().replace(" ", "");
         String binaryData = hexToBin(hexData);
 
-        String strPattern = "^0+";
-        String binaryBarrelCurrentLevel = binaryData.substring(0, 32).replaceAll(strPattern, "");
+        String binaryBarrelCurrentLevel = binaryData.substring(0, 32);
         String binaryBarrelTemperature = binaryData.substring(48, 62);
 
         float barrelCurrentLevel = Float.intBitsToFloat(Integer.parseInt(binaryBarrelCurrentLevel, 2)) * 1000;
