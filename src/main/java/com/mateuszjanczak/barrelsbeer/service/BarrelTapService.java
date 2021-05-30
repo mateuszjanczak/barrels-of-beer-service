@@ -47,7 +47,7 @@ public class BarrelTapService {
             if (barrelSetRequest.getCapacity() >= 0) {
                 barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent().name().replace("_", " "));
                 barrelTap.setBarrelName(barrelSetRequest.getBarrelName());
-                barrelTap.setCurrentLevel(barrelSetRequest.getCapacity());
+                barrelTap.setCurrentLevel(barrelSetRequest.getCapacity() - barrelTap.getCapacity() + barrelTap.getCurrentLevel());
                 barrelTap.setCapacity(barrelSetRequest.getCapacity());
                 barrelTapRepository.save(barrelTap);
                 logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_SET);
