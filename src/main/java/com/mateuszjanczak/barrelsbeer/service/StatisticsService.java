@@ -28,41 +28,18 @@ public class StatisticsService {
 
         Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
 
-        Map<String, Long> map = new HashMap<>();
-
-        for (Map.Entry<String, List<BarrelTapLog>> entry : groupedByBarrelContent.entrySet()) {
-            long sum = 0;
-            List<BarrelTapLog> barrelTapLogs = entry.getValue();
-            for (int i = 0, barrelTapLogsSize = barrelTapLogs.size(); i < barrelTapLogsSize; i++) {
-
-                long first = barrelTapLogs.get(i).getTotalUsage();
-
-                if(i == barrelTapLogs.size() - 1) {
-                    sum += first;
-                    map.put(entry.getKey(), sum);
-                    break;
-                }
-
-                long second = barrelTapLogs.get(i+1).getTotalUsage();
-                long diff = first - second;
-
-                if(diff > 0) {
-                    sum += diff;
-                } else {
-                    sum += first;
-                }
-
-                map.put(entry.getKey(), sum);
-            }
-        }
-
         List<Ranking> rankingList = new ArrayList<>();
 
-        for (Map.Entry<String, Long> entry : map.entrySet()) {
+        for (Map.Entry<String, List<BarrelTapLog>> entry : groupedByBarrelContent.entrySet()) {
+            List<BarrelTapLog> barrelTapLogs = entry.getValue();
+
+            long sum = barrelTapLogs.stream().map(BarrelTapLog::getSingleUsage).reduce(0L, Long::sum);
+
             Ranking ranking = new Ranking();
-            ranking.setBarrelContent(entry.getKey());
-            ranking.setCount(entry.getValue());
             ranking.setDate(new Date());
+            ranking.setBarrelContent(barrelTapLogs.get(0).getBarrelContent());
+            ranking.setCount(sum);
+
             rankingList.add(ranking);
         }
 
