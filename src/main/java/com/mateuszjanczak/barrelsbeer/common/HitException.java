@@ -1,4 +1,4 @@
-package com.mateuszjanczak.barrelsbeer.exception;
+package com.mateuszjanczak.barrelsbeer.common;
 
 public class HitException extends RuntimeException {
 }

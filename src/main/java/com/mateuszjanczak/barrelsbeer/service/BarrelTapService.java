@@ -7,8 +7,8 @@ import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.mapper.BarrelTapMapper;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
-import com.mateuszjanczak.barrelsbeer.parser.TelemetryData;
-import com.mateuszjanczak.barrelsbeer.parser.TelemetryParser;
+import com.mateuszjanczak.barrelsbeer.infrastructure.TelemetryData;
+import com.mateuszjanczak.barrelsbeer.infrastructure.TelemetryParser;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

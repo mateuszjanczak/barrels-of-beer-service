@@ -1,4 +1,4 @@
-package com.mateuszjanczak.barrelsbeer.parser;
+package com.mateuszjanczak.barrelsbeer.infrastructure;
 
 import lombok.Data;
 

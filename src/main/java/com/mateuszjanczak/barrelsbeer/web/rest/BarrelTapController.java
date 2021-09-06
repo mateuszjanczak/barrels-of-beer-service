@@ -5,7 +5,7 @@ import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapAddRequest;
 import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapHitResponse;
 import com.mateuszjanczak.barrelsbeer.domain.dto.ErrorResponse;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
-import com.mateuszjanczak.barrelsbeer.exception.HitException;
+import com.mateuszjanczak.barrelsbeer.common.HitException;
 import com.mateuszjanczak.barrelsbeer.service.BarrelTapService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
