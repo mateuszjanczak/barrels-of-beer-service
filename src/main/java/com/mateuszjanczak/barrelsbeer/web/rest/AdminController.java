@@ -1,20 +1,19 @@
 package com.mateuszjanczak.barrelsbeer.web.rest;
 
+import com.mateuszjanczak.barrelsbeer.domain.enums.TableType;
 import com.mateuszjanczak.barrelsbeer.service.AdminService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/admin")
 public class AdminController {
-    private final static String RESET_DB = "/reset-db";
-    private final static String ENABLE_TAPS = "/enable-taps";
-    private final static String DISABLE_TAPS = "/disable-taps";
+
+    private final static String RESET_DATABASE = "/resetDatabase/{table}";
+    private final static String TAP_ENABLE = "/barrelTaps/{id}/enable/{status}";
 
     private final AdminService adminService;
 
@@ -22,21 +21,15 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping(RESET_DB)
-    public ResponseEntity<?> resetDB() {
-        adminService.resetDB();
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(RESET_DATABASE)
+    public ResponseEntity<?> resetDatabase(@PathVariable TableType table) {
+        adminService.resetDatabase(table);
+        return new ResponseEntity<>(OK);
     }
 
-    @GetMapping(ENABLE_TAPS)
-    public ResponseEntity<?> enableTaps() {
-        adminService.enableTaps();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping(DISABLE_TAPS)
-    public ResponseEntity<?> disableTaps() {
-        adminService.disableTaps();
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(TAP_ENABLE)
+    public ResponseEntity<?> enableTap(@PathVariable int id, @PathVariable int status) {
+        adminService.setTapEnabled(id, status == 1);
+        return new ResponseEntity<>(OK);
     }
 }

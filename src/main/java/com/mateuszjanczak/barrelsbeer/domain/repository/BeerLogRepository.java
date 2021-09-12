@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface BeerLogRepository extends MongoRepository<BeerLog, String> {
     Optional<BeerLog> findFirstByOrderByIdDesc();
+
     Page<BeerLog> findBeerLogsByOrderByEndDate(Pageable pageable);
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class StatisticsBarrelContentType {
+public class ContentTypeStatistics {
     String name;
     List<StatisticsData> items;
 }

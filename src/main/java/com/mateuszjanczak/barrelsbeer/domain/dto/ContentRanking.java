@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class Ranking {
+public class ContentRanking {
     Date date;
     String barrelContent;
     Long count;

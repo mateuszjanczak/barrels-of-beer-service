@@ -19,4 +19,6 @@ public class BarrelTap {
     long currentLevel = 0;
 
     long capacity = 0;
+
+    boolean enabled = false;
 }

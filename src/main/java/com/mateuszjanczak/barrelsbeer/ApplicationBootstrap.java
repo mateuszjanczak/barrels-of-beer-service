@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class BarrelsOfBeerApplication {
+public class ApplicationBootstrap {
 
     public static void main(String[] args) {
-        SpringApplication.run(BarrelsOfBeerApplication.class, args);
+        SpringApplication.run(ApplicationBootstrap.class, args);
     }
 }
