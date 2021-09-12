@@ -1,8 +1,8 @@
 package com.mateuszjanczak.barrelsbeer.configuration.security;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.ErrorResponse;
 import com.mateuszjanczak.barrelsbeer.configuration.security.entity.User;
 import com.mateuszjanczak.barrelsbeer.configuration.security.service.UserService;
+import com.mateuszjanczak.barrelsbeer.domain.dto.ErrorResponse;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,7 +40,7 @@ public class JwtFilter extends GenericFilterBean {
 
         String header = request.getHeader(JwtProvider.AUTHORIZATION_HEADER);
 
-        if(Objects.isNull(header) || !header.startsWith(JwtProvider.TOKEN_PREFIX)) {
+        if (Objects.isNull(header) || !header.startsWith(JwtProvider.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,7 +49,7 @@ public class JwtFilter extends GenericFilterBean {
             String token = header.replace(JwtProvider.TOKEN_PREFIX, "");
             Authentication authentication = getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (JwtException ex){
+        } catch (JwtException ex) {
             // DEV JWT DEBUG
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getOutputStream().write(new ErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage()).toJson().getBytes());

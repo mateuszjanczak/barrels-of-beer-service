@@ -1,7 +1,7 @@
 package com.mateuszjanczak.barrelsbeer.configuration.security;
 
-import com.mateuszjanczak.barrelsbeer.domain.dto.ErrorResponse;
 import com.mateuszjanczak.barrelsbeer.configuration.security.web.rest.AuthController;
+import com.mateuszjanczak.barrelsbeer.domain.dto.ErrorResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().disable();
+        http.cors();
         http.csrf().disable(); // DEV
         http.headers().frameOptions().disable(); // DEV
         http.addFilterAfter(jwtFilter, BasicAuthenticationFilter.class);

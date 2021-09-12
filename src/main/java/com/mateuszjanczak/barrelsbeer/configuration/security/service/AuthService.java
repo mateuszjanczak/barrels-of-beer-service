@@ -57,7 +57,7 @@ public class AuthService {
     public UserResponse register(RegisterRequest registerRequest) {
 
         Optional<User> existingUser = userService.findByUsername(registerRequest.getUsername());
-        if(existingUser.isPresent()){
+        if (existingUser.isPresent()) {
             throw new UserAlreadyExistsException();
         }
 

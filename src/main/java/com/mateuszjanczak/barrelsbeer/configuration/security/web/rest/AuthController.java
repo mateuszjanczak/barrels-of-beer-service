@@ -1,10 +1,9 @@
 package com.mateuszjanczak.barrelsbeer.configuration.security.web.rest;
 
 import com.mateuszjanczak.barrelsbeer.configuration.security.dto.*;
-import com.mateuszjanczak.barrelsbeer.configuration.security.exception.InvalidRefreshTokenException;
 import com.mateuszjanczak.barrelsbeer.configuration.security.entity.User;
+import com.mateuszjanczak.barrelsbeer.configuration.security.exception.InvalidRefreshTokenException;
 import com.mateuszjanczak.barrelsbeer.configuration.security.service.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,17 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin
 public class AuthController {
 
-    public static final String PATH_POST_LOGIN = "/auth/login";
-    public static final String PATH_POST_SIGN_UP = "/auth/register";
-    public static final String PATH_POST_REFRESH_TOKEN = "/auth/token/refresh";
-    public static final String PATH_DELETE_LOGOUT = "/auth/logout";
-    private static final String PATH_GET_ME = "/auth/me";
+    public static final String PATH_POST_LOGIN = "/api/auth/login";
+    public static final String PATH_POST_SIGN_UP = "/api/auth/register";
+    public static final String PATH_POST_REFRESH_TOKEN = "/api/auth/token/refresh";
+    public static final String PATH_DELETE_LOGOUT = "/api/auth/logout";
+    private static final String PATH_GET_ME = "/api/auth/me";
 
     private final AuthService authService;
 
-    @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }

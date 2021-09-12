@@ -14,14 +14,10 @@ import java.util.Collections;
 public class User implements UserDetails {
     @Id
     String id;
-
-    private String email;
-
-    private String username;
-
-    private String password;
-
     boolean enabled = false;
+    private String email;
+    private String username;
+    private String password;
 
     public User() {
     }

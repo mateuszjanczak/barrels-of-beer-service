@@ -1,7 +1,5 @@
 package com.mateuszjanczak.barrelsbeer.configuration.security.dto;
 
-import java.util.stream.Collectors;
-
 public class UserResponse {
 
     private String username;
