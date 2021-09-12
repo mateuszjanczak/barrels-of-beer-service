@@ -33,7 +33,7 @@ public class DocumentService {
                         barrelTapLog.getBarrelContent(),
                         String.valueOf(barrelTapLog.getCurrentLevel()),
                         String.valueOf(barrelTapLog.getTotalUsage()),
-                        String.valueOf( barrelTapLog.getSingleUsage()),
+                        String.valueOf(barrelTapLog.getSingleUsage()),
                         String.valueOf(barrelTapLog.getDate()),
                         barrelTapLog.getLogType().name()
                 );

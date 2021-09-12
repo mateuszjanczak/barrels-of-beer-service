@@ -1,15 +1,13 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
-import com.mateuszjanczak.barrelsbeer.common.HitException;
-import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelSetRequest;
-import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapAddRequest;
-import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapHitResponse;
+import com.mateuszjanczak.barrelsbeer.common.BarrelTapHitException;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelSet;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapAdd;
+import com.mateuszjanczak.barrelsbeer.domain.dto.BarrelTapHit;
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
-import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.mapper.BarrelTapMapper;
-import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
 import com.mateuszjanczak.barrelsbeer.domain.model.TelemetryData;
-import com.mateuszjanczak.barrelsbeer.infrastructure.SensorAdapter;
+import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +28,8 @@ public class BarrelTapService {
         this.barrelTapMapper = barrelTapMapper;
     }
 
-    public void addBeerTap(BarrelTapAddRequest barrelTapAddRequest) {
-        BarrelTap barrelTap = barrelTapMapper.dtoToEntity(barrelTapAddRequest);
+    public void addBeerTap(BarrelTapAdd barrelTapAdd) {
+        BarrelTap barrelTap = barrelTapMapper.dtoToEntity(barrelTapAdd);
         barrelTapRepository.save(barrelTap);
         logsService.saveBarrelTapLog(barrelTap, BARREL_TAP_NEW);
     }
@@ -40,16 +38,16 @@ public class BarrelTapService {
         return barrelTapRepository.findAll();
     }
 
-    public void setBarrelOnBeerTap(int id, BarrelSetRequest barrelSetRequest) {
+    public void setBarrelOnBeerTap(int id, BarrelSet barrelSet) {
         Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
 
         if (optionalBarrel.isPresent()) {
             BarrelTap barrelTap = optionalBarrel.get();
-            if (barrelSetRequest.getCapacity() >= 0) {
-                barrelTap.setBarrelContent(barrelSetRequest.getBarrelContent().name().replace("_", " "));
-                barrelTap.setBarrelName(barrelSetRequest.getBarrelName());
-                barrelTap.setCurrentLevel(barrelSetRequest.getCapacity() - barrelTap.getCapacity() + barrelTap.getCurrentLevel());
-                barrelTap.setCapacity(barrelSetRequest.getCapacity());
+            if (barrelSet.getCapacity() >= 0) {
+                barrelTap.setBarrelContent(barrelSet.getBarrelContent().name().replace("_", " "));
+                barrelTap.setBarrelName(barrelSet.getBarrelName());
+                barrelTap.setCurrentLevel(barrelSet.getCapacity() - barrelTap.getCapacity() + barrelTap.getCurrentLevel());
+                barrelTap.setCapacity(barrelSet.getCapacity());
                 barrelTapRepository.save(barrelTap);
                 logsService.saveBarrelTapLog(barrelTap, BARREL_TAP_SET);
             }
@@ -65,7 +63,7 @@ public class BarrelTapService {
         return optionalBarrelTap.orElse(null);
     }
 
-    public BarrelTapHitResponse hitBarrelTap(int id, long currentLevel, float temperature) {
+    public BarrelTapHit hitBarrelTap(int id, long currentLevel, float temperature) {
         Optional<BarrelTap> optionalBarrel = barrelTapRepository.findById(id);
 
         if (optionalBarrel.isPresent()) {
@@ -87,7 +85,7 @@ public class BarrelTapService {
 
             return barrelTapMapper.barrelToHitResponse(barrelTap);
         } else {
-            throw new HitException();
+            throw new BarrelTapHitException();
         }
     }
 }

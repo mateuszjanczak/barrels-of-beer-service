@@ -15,12 +15,10 @@ import java.util.Optional;
 @Component
 public class SensorClient {
 
+    private final RestTemplate restTemplate;
     Logger log = LoggerFactory.getLogger(SensorClient.class);
-
     @Value("${sensor.url}")
     private String SENSOR_URL;
-
-    private final RestTemplate restTemplate;
 
     public SensorClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,7 +28,7 @@ public class SensorClient {
         try {
             ResponseEntity<SensorData> sensorDataResponseEntity = restTemplate.exchange(SENSOR_URL.replace("$SENSOR_ID", String.valueOf(id)), HttpMethod.GET, HttpEntity.EMPTY, SensorData.class);
             return Optional.ofNullable(sensorDataResponseEntity.getBody());
-        } catch (RestClientException e)  {
+        } catch (RestClientException e) {
             log.error("Failed to connect to the server - " + e.getMessage());
         }
 

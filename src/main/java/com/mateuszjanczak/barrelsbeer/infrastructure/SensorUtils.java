@@ -10,6 +10,7 @@ import java.util.Map;
 public class SensorUtils {
 
     private final Map<String, String> digitsMap;
+
     {
         digitsMap = new HashMap<>();
         digitsMap.put("0", "0000");

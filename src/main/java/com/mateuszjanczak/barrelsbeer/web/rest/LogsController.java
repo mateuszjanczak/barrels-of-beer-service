@@ -8,7 +8,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class LogsController {
         return new ResponseEntity<>(barrelTapLogsList, OK);
     }
 
-    @GetMapping( LOGS_BARREL_TAPS_CSV)
+    @GetMapping(LOGS_BARREL_TAPS_CSV)
     public ResponseEntity<Resource> getBarrelTapLogsListCsv() {
         Resource resource = new InputStreamResource(logsService.getBarrelTapLogsListCsv());
         return ResponseEntity.ok()

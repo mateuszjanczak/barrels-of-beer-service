@@ -36,6 +36,11 @@ public class LogsService {
         this.documentService = documentService;
     }
 
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
+    }
+
     public void saveBarrelTapLog(BarrelTap barrelTap, LogType logType) {
         BarrelTapLog barrelTapLog = new BarrelTapLog();
         barrelTapLog.setBarrelTapId(barrelTap.getBarrelTapId());
@@ -44,7 +49,7 @@ public class LogsService {
         barrelTapLog.setCurrentLevel(barrelTap.getCurrentLevel());
         barrelTapLog.setTotalUsage(barrelTap.getCapacity() - barrelTap.getCurrentLevel());
 
-        if(logType == BARREL_TAP_READ) {
+        if (logType == BARREL_TAP_READ) {
             barrelTapLog.setSingleUsage(barrelTap.getCapacity() - barrelTap.getCurrentLevel() - getLastTotalUsage(barrelTap.getBarrelTapId()));
         } else {
             barrelTapLog.setSingleUsage(0);
@@ -95,7 +100,7 @@ public class LogsService {
 
         List<BarrelTapLog> list;
 
-        if(lastBeerLog.isPresent()) {
+        if (lastBeerLog.isPresent()) {
             Date lastDate = lastBeerLog.get().getEndDate();
             list = barrelTapLogRepository.findBarrelTapLogByDateAfter(lastDate).stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(BARREL_TAP_READ)).collect(Collectors.toList());
         } else {
@@ -104,7 +109,7 @@ public class LogsService {
 
         Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
 
-        for (Map.Entry<String, List<BarrelTapLog>> entry: groupedByBarrelContent.entrySet()) {
+        for (Map.Entry<String, List<BarrelTapLog>> entry : groupedByBarrelContent.entrySet()) {
             List<BarrelTapLog> barrelTapLogs = entry.getValue();
 
             Date lastDate = barrelTapLogs.get(0).getDate();
@@ -120,7 +125,7 @@ public class LogsService {
                         amount += barrelTapLog.getSingleUsage();
                         tempList.add(barrelTapLog);
                     } else {
-                        if(i == barrelTapLogsSize - 1) {
+                        if (i == barrelTapLogsSize - 1) {
                             amount += barrelTapLog.getSingleUsage();
                             tempList.add(barrelTapLog);
                         }
@@ -140,10 +145,5 @@ public class LogsService {
                 lastDate = barrelTapLog.getDate();
             }
         }
-    }
-
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
 }

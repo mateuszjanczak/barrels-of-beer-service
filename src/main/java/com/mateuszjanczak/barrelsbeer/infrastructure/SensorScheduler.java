@@ -14,11 +14,9 @@ import java.util.Optional;
 @Component
 public class SensorScheduler {
 
-    Logger log = LoggerFactory.getLogger(SensorScheduler.class);
-
     private final BarrelTapService barrelTapService;
     private final SensorAdapter sensorAdapter;
-
+    Logger log = LoggerFactory.getLogger(SensorScheduler.class);
     private List<BarrelTap> barrelTapList;
 
     public SensorScheduler(BarrelTapService barrelTapService, SensorAdapter sensorAdapter) {
