@@ -9,9 +9,9 @@ import java.util.Map;
 @Component
 public class SensorUtils {
 
-    private static final Map<String, String> digitsMap = new HashMap<>();
-
-    static {
+    private final Map<String, String> digitsMap;
+    {
+        digitsMap = new HashMap<>();
         digitsMap.put("0", "0000");
         digitsMap.put("1", "0001");
         digitsMap.put("2", "0010");
@@ -48,7 +48,7 @@ public class SensorUtils {
         return telemetryData;
     }
 
-    static String hexToBin(String s) {
+    private String hexToBin(String s) {
         char[] hex = s.toCharArray();
         StringBuilder binaryString = new StringBuilder();
         for (char h : hex) {
