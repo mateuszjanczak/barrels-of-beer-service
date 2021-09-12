@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api")
@@ -33,7 +35,7 @@ public class LogsController {
     @GetMapping(LOGS_BARREL_TAPS)
     public ResponseEntity<Page<BarrelTapLog>> getBarrelTapLogsList(@PathVariable int page) {
         Page<BarrelTapLog> barrelTapLogsList = logsService.getBarrelTapLogsList(page);
-        return new ResponseEntity<>(barrelTapLogsList, HttpStatus.OK);
+        return new ResponseEntity<>(barrelTapLogsList, OK);
     }
 
     @GetMapping( LOGS_BARREL_TAPS_CSV)
@@ -48,18 +50,18 @@ public class LogsController {
     @GetMapping(LOGS_BARREL_TEMPERATURE)
     public ResponseEntity<Page<BarrelTemperatureLog>> getBarrelTemperatureLogsList(@PathVariable int page) {
         Page<BarrelTemperatureLog> barrelTemperatureLogsList = logsService.getBarrelTemperatureLogsList(page);
-        return new ResponseEntity<>(barrelTemperatureLogsList, HttpStatus.OK);
+        return new ResponseEntity<>(barrelTemperatureLogsList, OK);
     }
 
     @GetMapping(LOGS_BEERS)
     public ResponseEntity<Page<BeerLog>> getBeerStatisticsList(@PathVariable int page) {
         Page<BeerLog> beerLogsList = logsService.getBeerStatisticsList(page);
-        return new ResponseEntity<>(beerLogsList, HttpStatus.OK);
+        return new ResponseEntity<>(beerLogsList, OK);
     }
 
     @PostMapping(LOGS_BEERS_UPDATE)
     public ResponseEntity<Void> generateBeerStatistics() {
         logsService.generateBeerStatistics();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(OK);
     }
 }

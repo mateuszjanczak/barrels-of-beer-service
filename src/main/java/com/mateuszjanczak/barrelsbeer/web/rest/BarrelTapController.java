@@ -15,6 +15,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api")
@@ -35,30 +38,30 @@ public class BarrelTapController {
 
     @GetMapping(GET_BARREL_TAP)
     ResponseEntity<BarrelTap> getBarrelTapById(@PathVariable int id) {
-        return new ResponseEntity<>(barrelTapService.getBarrelTapById(id), HttpStatus.OK);
+        return new ResponseEntity<>(barrelTapService.getBarrelTapById(id), OK);
     }
 
     @GetMapping(LIST_BARRELS_TAPS)
     ResponseEntity<List<BarrelTap>> getBarrelTapList() {
-        return new ResponseEntity<>(barrelTapService.getBarrelTapList(), HttpStatus.OK);
+        return new ResponseEntity<>(barrelTapService.getBarrelTapList(), OK);
     }
 
     @PostMapping(ADD_BARREL_TAP)
     ResponseEntity<?> addBeerTap(@Valid @RequestBody BarrelTapAddRequest barrelTapAddRequest) {
         barrelTapService.addBeerTap(barrelTapAddRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(OK);
     }
 
     @PostMapping(SET_BARREL_TAP)
     ResponseEntity<?> setBarrelOnBeerTap(@PathVariable int id, @Valid @RequestBody BarrelSetRequest barrelSetRequest) {
         barrelTapService.setBarrelOnBeerTap(id, barrelSetRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(OK);
     }
 
     @GetMapping(HIT_BARREL_TAP)
     ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable long currentLevel, @PathVariable float temperature) {
-        Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id, currentLevel, temperature);
-        return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
+        BarrelTapHitResponse barrelTapHitResponse = barrelTapService.hitBarrelTap(id, currentLevel, temperature);
+        return new ResponseEntity<>(barrelTapHitResponse, OK);
     }
 
 //    @GetMapping(HEX_BARREL_TAP)
@@ -68,9 +71,9 @@ public class BarrelTapController {
 //    }
 
     @ExceptionHandler(HitException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     @ResponseBody
     public ErrorResponse handleHitBarrelTapException(HitException e) {
-        return new ErrorResponse(HttpStatus.BAD_REQUEST, "Kranik nie istnieje lub pojemność beczki jest równa 0");
+        return new ErrorResponse(BAD_REQUEST, "Kranik nie istnieje lub pojemność beczki jest równa 0");
     }
 }

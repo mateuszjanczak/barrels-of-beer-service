@@ -10,10 +10,10 @@ import java.util.Optional;
 @Component
 public class SensorAdapter {
 
+    Logger log = LoggerFactory.getLogger(SensorAdapter.class);
+
     private final SensorClient sensorClient;
     private final SensorUtils sensorUtils;
-
-    Logger log = LoggerFactory.getLogger(SensorAdapter.class);
 
     public SensorAdapter(SensorClient sensorClient, SensorUtils sensorUtils) {
         this.sensorClient = sensorClient;

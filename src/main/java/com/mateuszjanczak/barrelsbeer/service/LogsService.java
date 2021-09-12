@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.mateuszjanczak.barrelsbeer.domain.enums.LogType.BARREL_TAP_READ;
+
 @Service
 public class LogsService {
 
@@ -42,7 +44,7 @@ public class LogsService {
         barrelTapLog.setCurrentLevel(barrelTap.getCurrentLevel());
         barrelTapLog.setTotalUsage(barrelTap.getCapacity() - barrelTap.getCurrentLevel());
 
-        if(logType == LogType.BARREL_TAP_READ) {
+        if(logType == BARREL_TAP_READ) {
             barrelTapLog.setSingleUsage(barrelTap.getCapacity() - barrelTap.getCurrentLevel() - getLastTotalUsage(barrelTap.getBarrelTapId()));
         } else {
             barrelTapLog.setSingleUsage(0);
@@ -95,9 +97,9 @@ public class LogsService {
 
         if(lastBeerLog.isPresent()) {
             Date lastDate = lastBeerLog.get().getEndDate();
-            list = barrelTapLogRepository.findBarrelTapLogByDateAfter(lastDate).stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
+            list = barrelTapLogRepository.findBarrelTapLogByDateAfter(lastDate).stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(BARREL_TAP_READ)).collect(Collectors.toList());
         } else {
-            list = barrelTapLogRepository.findAll().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)).collect(Collectors.toList());
+            list = barrelTapLogRepository.findAll().stream().filter(barrelTapLog -> barrelTapLog.getLogType().equals(BARREL_TAP_READ)).collect(Collectors.toList());
         }
 
         Map<String, List<BarrelTapLog>> groupedByBarrelContent = list.stream().collect(Collectors.groupingBy(BarrelTapLog::getBarrelContent));
@@ -111,7 +113,7 @@ public class LogsService {
             List<BarrelTapLog> tempList = new ArrayList<>();
             for (int i = 0, barrelTapLogsSize = barrelTapLogs.size(); i < barrelTapLogsSize; i++) {
                 BarrelTapLog barrelTapLog = barrelTapLogs.get(i);
-                if (barrelTapLog.getLogType().equals(LogType.BARREL_TAP_READ)) {
+                if (barrelTapLog.getLogType().equals(BARREL_TAP_READ)) {
                     long diff = getDateDiff(lastDate, barrelTapLog.getDate(), TimeUnit.SECONDS);
 
                     if (diff < 5 && i != barrelTapLogsSize - 1) {

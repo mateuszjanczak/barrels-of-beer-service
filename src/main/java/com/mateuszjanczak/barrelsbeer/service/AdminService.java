@@ -1,6 +1,7 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
 import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
+import com.mateuszjanczak.barrelsbeer.domain.enums.TableType;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTemperatureLogRepository;
@@ -27,11 +28,23 @@ public class AdminService {
         this.sensorScheduler = sensorScheduler;
     }
 
-    public void resetDB() {
-        barrelTapRepository.deleteAll();
-        barrelTapLogRepository.deleteAll();
-        barrelTemperatureLogRepository.deleteAll();
-        beerLogRepository.deleteAll();
+    public void resetDatabase(TableType table) {
+        switch (table) {
+            case BARREL_TAP:
+                barrelTapRepository.deleteAll();
+                break;
+            case BARREL_TAP_LOG:
+                barrelTapLogRepository.deleteAll();
+                break;
+            case BARREL_TEMPERATURE_LOG:
+                barrelTemperatureLogRepository.deleteAll();
+                break;
+            case BEER_LOG:
+                beerLogRepository.deleteAll();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + table);
+        }
     }
 
     public void setTapEnabled(int id, boolean enabled) {
