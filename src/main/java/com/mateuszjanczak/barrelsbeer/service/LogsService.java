@@ -20,17 +20,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
-public class LogService {
+public class LogsService {
+
     private final BarrelTapLogRepository barrelTapLogRepository;
     private final BarrelTemperatureLogRepository barrelTemperatureLogRepository;
     private final BeerLogRepository beerLogRepository;
-    private final CsvService csvService;
+    private final DocumentService documentService;
 
-    public LogService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository, BeerLogRepository beerLogRepository, CsvService csvService) {
+    public LogsService(BarrelTapLogRepository barrelTapLogRepository, BarrelTemperatureLogRepository barrelTemperatureLogRepository, BeerLogRepository beerLogRepository, DocumentService documentService) {
         this.barrelTapLogRepository = barrelTapLogRepository;
         this.barrelTemperatureLogRepository = barrelTemperatureLogRepository;
         this.beerLogRepository = beerLogRepository;
-        this.csvService = csvService;
+        this.documentService = documentService;
     }
 
     public void saveBarrelTapLog(BarrelTap barrelTap, LogType logType) {
@@ -78,7 +79,7 @@ public class LogService {
 
     public ByteArrayInputStream getBarrelTapLogsListCsv() {
         List<BarrelTapLog> barrelTapLogs = barrelTapLogRepository.findAll();
-        return csvService.load(barrelTapLogs);
+        return documentService.load(barrelTapLogs);
     }
 
     public Page<BeerLog> getBeerStatisticsList(int page) {

@@ -61,14 +61,14 @@ public class BarrelTapController {
         return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
     }
 
-    @GetMapping(HEX_BARREL_TAP)
-    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable String hex) {
-        Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id, hex);
-        return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
-    }
+//    @GetMapping(HEX_BARREL_TAP)
+//    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable String hex) {
+//        Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id, hex);
+//        return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
+//    }
 
-    @ExceptionHandler(value = HitException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HitException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorResponse handleHitBarrelTapException(HitException e) {
         return new ErrorResponse(HttpStatus.BAD_REQUEST, "Kranik nie istnieje lub pojemność beczki jest równa 0");

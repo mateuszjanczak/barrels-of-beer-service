@@ -1,4 +1,4 @@
-package com.mateuszjanczak.barrelsbeer.driver;
+package com.mateuszjanczak.barrelsbeer.infrastructure;
 
 public class SensorData {
     public int cid;

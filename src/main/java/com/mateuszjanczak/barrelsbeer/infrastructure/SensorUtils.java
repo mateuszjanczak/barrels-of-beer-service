@@ -1,12 +1,13 @@
 package com.mateuszjanczak.barrelsbeer.infrastructure;
 
+import com.mateuszjanczak.barrelsbeer.domain.model.TelemetryData;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class TelemetryParser {
+public class SensorUtils {
 
     private static final Map<String, String> digitsMap = new HashMap<>();
 
@@ -29,7 +30,7 @@ public class TelemetryParser {
         digitsMap.put("F", "1111");
     }
 
-    public TelemetryData parseRawData(String value) {
+    public TelemetryData getTelemetryData(String value) {
 
         String hexData = value.trim().replace(" ", "");
         String binaryData = hexToBin(hexData);

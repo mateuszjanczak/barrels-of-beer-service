@@ -1,14 +1,18 @@
 package com.mateuszjanczak.barrelsbeer.service;
 
+import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapLogRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTemperatureLogRepository;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BeerLogRepository;
-import com.mateuszjanczak.barrelsbeer.driver.SensorScheduler;
+import com.mateuszjanczak.barrelsbeer.infrastructure.SensorScheduler;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AdminService {
+
     private final BarrelTapRepository barrelTapRepository;
     private final BarrelTapLogRepository barrelTapLogRepository;
     private final BarrelTemperatureLogRepository barrelTemperatureLogRepository;
@@ -30,11 +34,16 @@ public class AdminService {
         beerLogRepository.deleteAll();
     }
 
-    public void enableTaps() {
-        sensorScheduler.enableTaps();
-    }
+    public void setTapEnabled(int id, boolean enabled) {
 
-    public void disableTaps() {
-        sensorScheduler.disableTaps();
+        Optional<BarrelTap> optionalBarrelTap = barrelTapRepository.findById(id);
+
+        if (optionalBarrelTap.isPresent()) {
+            BarrelTap barrelTap = optionalBarrelTap.get();
+            barrelTap.setEnabled(enabled);
+            barrelTapRepository.save(barrelTap);
+        }
+
+        sensorScheduler.refreshTaps();
     }
 }

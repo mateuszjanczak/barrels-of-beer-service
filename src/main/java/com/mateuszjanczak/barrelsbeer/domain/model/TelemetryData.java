@@ -1,4 +1,4 @@
-package com.mateuszjanczak.barrelsbeer.infrastructure;
+package com.mateuszjanczak.barrelsbeer.domain.model;
 
 import lombok.Data;
 

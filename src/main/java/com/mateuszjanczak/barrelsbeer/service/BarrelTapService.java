@@ -7,8 +7,8 @@ import com.mateuszjanczak.barrelsbeer.domain.entity.BarrelTap;
 import com.mateuszjanczak.barrelsbeer.domain.enums.LogType;
 import com.mateuszjanczak.barrelsbeer.domain.mapper.BarrelTapMapper;
 import com.mateuszjanczak.barrelsbeer.domain.repository.BarrelTapRepository;
-import com.mateuszjanczak.barrelsbeer.infrastructure.TelemetryData;
-import com.mateuszjanczak.barrelsbeer.infrastructure.TelemetryParser;
+import com.mateuszjanczak.barrelsbeer.domain.model.TelemetryData;
+import com.mateuszjanczak.barrelsbeer.infrastructure.SensorAdapter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,21 +18,21 @@ import java.util.Optional;
 public class BarrelTapService {
 
     private final BarrelTapRepository barrelTapRepository;
-    private final LogService logService;
+    private final LogsService logsService;
     private final BarrelTapMapper barrelTapMapper;
-    private final TelemetryParser telemetryParser;
+    private final SensorAdapter sensorAdapter;
 
-    public BarrelTapService(BarrelTapRepository barrelTapRepository, LogService logService, BarrelTapMapper barrelTapMapper, TelemetryParser telemetryParser) {
+    public BarrelTapService(BarrelTapRepository barrelTapRepository, LogsService logsService, BarrelTapMapper barrelTapMapper, SensorAdapter sensorAdapter) {
         this.barrelTapRepository = barrelTapRepository;
-        this.logService = logService;
+        this.logsService = logsService;
         this.barrelTapMapper = barrelTapMapper;
-        this.telemetryParser = telemetryParser;
+        this.sensorAdapter = sensorAdapter;
     }
 
     public void addBeerTap(BarrelTapAddRequest barrelTapAddRequest) {
         BarrelTap barrelTap = barrelTapMapper.dtoToEntity(barrelTapAddRequest);
         barrelTapRepository.save(barrelTap);
-        logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_NEW);
+        logsService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_NEW);
     }
 
     public List<BarrelTap> getBarrelTapList() {
@@ -50,13 +50,12 @@ public class BarrelTapService {
                 barrelTap.setCurrentLevel(barrelSetRequest.getCapacity() - barrelTap.getCapacity() + barrelTap.getCurrentLevel());
                 barrelTap.setCapacity(barrelSetRequest.getCapacity());
                 barrelTapRepository.save(barrelTap);
-                logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_SET);
+                logsService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_SET);
             }
         }
     }
 
-    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, String value) {
-        TelemetryData telemetryData = telemetryParser.parseRawData(value);
+    public Optional<BarrelTapHitResponse> hitBarrelTap(int id, TelemetryData telemetryData) {
         return hitBarrelTap(id, telemetryData.getCurrentLevel(), telemetryData.getTemperature());
     }
 
@@ -76,13 +75,13 @@ public class BarrelTapService {
             if (capacity != barrelTap.getCurrentLevel() && barrelTap.getCurrentLevel() > 0) {
                 barrelTap.setCurrentLevel(capacity);
                 barrelTapRepository.save(barrelTap);
-                logService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_READ);
+                logsService.saveBarrelTapLog(barrelTap, LogType.BARREL_TAP_READ);
             }
 
             if (temperature != barrelTap.getTemperature()) {
                 barrelTap.setTemperature(temperature);
                 barrelTapRepository.save(barrelTap);
-                logService.saveBarrelTemperatureLog(barrelTap);
+                logsService.saveBarrelTemperatureLog(barrelTap);
             }
 
             return Optional.ofNullable(barrelTapMapper.barrelToHitResponse(barrelTap));

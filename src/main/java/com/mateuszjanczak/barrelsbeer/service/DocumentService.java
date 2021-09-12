@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class CsvService {
+public class DocumentService {
 
     private static final String[] HEADERS = {"Identyfikator operacji", "Numer kraniku", "Kod beczki", "Zawartość beczki", "Stan", "Ogólne zużycie", "Zużycie", "Data", "Typ operacji"};
     private static final CSVFormat FORMAT = CSVFormat.DEFAULT.withHeader(HEADERS);
