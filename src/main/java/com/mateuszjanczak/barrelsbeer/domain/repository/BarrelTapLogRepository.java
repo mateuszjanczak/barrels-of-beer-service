@@ -18,4 +18,6 @@ public interface BarrelTapLogRepository extends MongoRepository<BarrelTapLog, St
     List<BarrelTapLog> findBarrelTapLogByBarrelTapIdOrderByIdDesc(int barrelTapId);
 
     List<BarrelTapLog> findBarrelTapLogByDateAfter(Date date);
+
+    void deleteAllByBarrelTapId(int barrelTapId);
 }

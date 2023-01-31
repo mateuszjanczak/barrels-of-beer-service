@@ -59,4 +59,10 @@ public class AdminService {
 
         sensorScheduler.refreshTaps();
     }
+
+    public void resetTap(int id) {
+        barrelTapRepository.deleteById(id);
+        barrelTapLogRepository.deleteAllByBarrelTapId(id);
+        barrelTemperatureLogRepository.deleteAllByBarrelTapId(id);
+    }
 }

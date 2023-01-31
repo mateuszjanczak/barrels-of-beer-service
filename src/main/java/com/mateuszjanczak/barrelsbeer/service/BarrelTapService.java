@@ -80,7 +80,7 @@ public class BarrelTapService {
             if (temperature != barrelTap.getTemperature()) {
                 barrelTap.setTemperature(temperature);
                 barrelTapRepository.save(barrelTap);
-                logsService.saveBarrelTemperatureLog(barrelTap);
+                //logsService.saveBarrelTemperatureLog(barrelTap);
             }
 
             return barrelTapMapper.barrelToHitResponse(barrelTap);

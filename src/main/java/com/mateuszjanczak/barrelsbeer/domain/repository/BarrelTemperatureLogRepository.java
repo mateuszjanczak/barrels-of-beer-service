@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BarrelTemperatureLogRepository extends MongoRepository<BarrelTemperatureLog, String> {
+    void deleteAllByBarrelTapId(int barrelTapId);
 }
