@@ -26,7 +26,6 @@ public class BarrelTapController {
     private final static String GET_BARREL_TAP = "/barrelTaps/{id}";
     private final static String SET_BARREL_TAP = "/barrelTaps/{id}/set";
     private final static String HIT_BARREL_TAP = "/barrelTaps/{id}/hit/currentLevel/{currentLevel}/temperature/{temperature}";
-    private final static String HEX_BARREL_TAP = "/barrelTaps/{id}/hex/{hex}";
 
     private final BarrelTapService barrelTapService;
 
@@ -61,12 +60,6 @@ public class BarrelTapController {
         BarrelTapHit barrelTapHit = barrelTapService.hitBarrelTap(id, currentLevel, temperature);
         return new ResponseEntity<>(barrelTapHit, OK);
     }
-
-//    @GetMapping(HEX_BARREL_TAP)
-//    ResponseEntity<BarrelTapHitResponse> hitBarrelTap(@PathVariable int id, @PathVariable String hex) {
-//        Optional<BarrelTapHitResponse> optionalBarrelHitResponse = barrelTapService.hitBarrelTap(id, hex);
-//        return optionalBarrelHitResponse.map(barrelTapHitResponse -> new ResponseEntity<>(barrelTapHitResponse, HttpStatus.OK)).orElseThrow(HitException::new);
-//    }
 
     @ExceptionHandler(BarrelTapHitException.class)
     @ResponseStatus(BAD_REQUEST)

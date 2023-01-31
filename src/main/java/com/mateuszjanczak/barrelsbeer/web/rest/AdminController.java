@@ -14,6 +14,7 @@ public class AdminController {
 
     private final static String RESET_DATABASE = "/resetDatabase/{table}";
     private final static String TAP_ENABLE = "/barrelTaps/{id}/enable/{status}";
+    private final static String TAP_RESET = "/barrelTaps/{id}/reset";
 
     private final AdminService adminService;
 
@@ -30,6 +31,12 @@ public class AdminController {
     @PostMapping(TAP_ENABLE)
     public ResponseEntity<?> enableTap(@PathVariable int id, @PathVariable int status) {
         adminService.setTapEnabled(id, status == 1);
+        return new ResponseEntity<>(OK);
+    }
+
+    @PostMapping(TAP_RESET)
+    public ResponseEntity<Void> resetTap(@PathVariable int id){
+        adminService.resetTap(id);
         return new ResponseEntity<>(OK);
     }
 }
